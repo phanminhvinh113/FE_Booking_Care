@@ -1,0 +1,20 @@
+.manage-schedule-doctor-system {
+    .schedule-time-doctor {
+        gap: 15px;
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 30px;
+        button {
+            border: 1px solid #ccc;
+        }
+        .btn-schedule {
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+        .btn-selected {
+            background-color: #6c757d;
+            color: #fff;
+        }
+    }
+}

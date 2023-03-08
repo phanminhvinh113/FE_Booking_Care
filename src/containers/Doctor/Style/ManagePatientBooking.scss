@@ -1,0 +1,55 @@
+._loading_overlay_wrapper {
+    position: unset;
+    ._loading_overlay_overlay {
+        z-index: 800000000;
+    }
+}
+.manage-list-schedule-patient-booking {
+    .table-list-patient {
+        #customers {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #customers td,
+        #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #customers tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #customers tr:hover {
+            background-color: #ddd;
+        }
+
+        #customers th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #04aa6d;
+            color: white;
+        }
+        .table-users-redux {
+            min-height: 85vh;
+        }
+        .btn-confirm {
+            border: none;
+            border-radius: 5px;
+            background-color: #45c3d2;
+            color: #fff;
+            padding: 5px;
+        }
+        .btn-bill {
+            border: none;
+            width: 100px;
+            background-color: #04aa6d;
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+        }
+    }
+}

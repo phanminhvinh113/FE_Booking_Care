@@ -1,0 +1,17 @@
+.container-message-patient-doctor {
+    .img-message {
+        //
+        position: fixed;
+        bottom: 35px;
+        right: 35px;
+        cursor: pointer;
+        transition: all linear 0.25s;
+        //
+        img {
+            width: 55px;
+        }
+        &:hover {
+            scale: 1.1;
+        }
+    }
+}

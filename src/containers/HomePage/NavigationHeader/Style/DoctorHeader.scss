@@ -1,0 +1,73 @@
+.health-facilities-header-home-page {
+    a {
+        text-decoration: none;
+    }
+    .search-doctor {
+        position: fixed;
+        width: 100%;
+        left: 0;
+        background: #f5f5f5;
+        top: 50px;
+        height: 50px;
+        padding: 10px 15px;
+        z-index: 1;
+        input {
+            outline: none;
+            height: 30px;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.7);
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+        }
+    }
+    .doctor-outstanding {
+        h3 {
+            font-size: 1.6rem;
+            padding: 10px 15px;
+            font-weight: bold;
+        }
+        .doctor-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+            img {
+                cursor: pointer;
+                margin-right: 10px;
+                width: 50px;
+                border-radius: 50%;
+            }
+            span {
+                line-height: 1.3em;
+                font-size: 14.3px;
+                color: #333;
+            }
+            &:hover span {
+                color: #45c3d2;
+                font-style: italic;
+            }
+        }
+    }
+    .list-doctor-search {
+        h3 {
+            font-size: 1.5rem;
+            padding: 15px;
+        }
+        .doctor-item-search {
+            a {
+                color: #333;
+            }
+            padding: 15px;
+            img {
+                cursor: pointer;
+                margin-right: 10px;
+                width: 50px;
+                border-radius: 50%;
+            }
+            &:hover a {
+                color: #45c3d2;
+                font-style: italic;
+            }
+        }
+    }
+}

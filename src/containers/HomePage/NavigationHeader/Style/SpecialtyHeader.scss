@@ -1,0 +1,21 @@
+.specialty-header-naviagte-home-page {
+    height: 100vh;
+    margin-top: 50px;
+    .specialty-item {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        a {
+            text-decoration: none;
+            color: rgb(77, 77, 77);
+            font-size: 14.4px;
+            font-style: italic;
+        }
+        img {
+            width: 100px;
+            margin-right: 10px;
+        }
+        &:hover a {
+            color: #0dcaf0;
+        }
+    }
+}

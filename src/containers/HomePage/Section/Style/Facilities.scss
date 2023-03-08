@@ -1,0 +1,44 @@
+.section_facilites {
+    height: 330px;
+    padding: 25px;
+    .title_section {
+        font-size: 24px;
+        padding: 15px 0px 20px 0px;
+        margin-left: 10px;
+    }
+    .specialty_content {
+    }
+    img {
+        width: 278px !important;
+        height: 156.38px !important;
+        cursor: pointer;
+        &:hover ~ h3 {
+            color: #45c3d2;
+        }
+    }
+    h3 {
+        font-family: 'Montserrat', sans-serif;
+        margin-top: 5px;
+        font-size: 1.3rem;
+        outline: none;
+        user-select: none;
+    }
+    .slick-slider {
+        width: 1170px;
+        //transform: translateX(10px) !important;
+        margin: auto;
+    }
+    .slick-next {
+        right: 30px !important;
+        &:before {
+            font-size: 32px !important;
+        }
+    }
+    .slick-prev {
+        left: 2px !important;
+        z-index: 5;
+        &:before {
+            font-size: 32px !important;
+        }
+    }
+}

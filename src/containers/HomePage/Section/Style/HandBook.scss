@@ -1,0 +1,53 @@
+.section_handbook {
+    height: 330px;
+    padding: 25px;
+
+    border-top: 3px solid #efeef5;
+
+    .title_section {
+        font-size: 24px;
+        padding: 15px 0px 20px 0px;
+        margin-left: 10px;
+    }
+    .specialty_content {
+    }
+    img {
+        width: 282px !important;
+        height: 150px !important;
+        cursor: pointer;
+        &:hover ~ h3 {
+            color: #45c3d2;
+        }
+    }
+    h3 {
+        color: #333333cf;
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 15px;
+        padding: 10px;
+    }
+    .slick-slider {
+        //width: 1170px;
+        //transform: translateX(10px) !important;
+        margin: auto;
+    }
+    .slick-slide {
+        div {
+            display: flex !important;
+        }
+    }
+    .slick-next {
+        right: 30px !important;
+        &:before {
+            font-size: 40px !important;
+        }
+    }
+    .slick-prev {
+        left: 2px !important;
+        z-index: 5;
+
+        &:before {
+            font-size: 40px !important;
+        }
+    }
+}

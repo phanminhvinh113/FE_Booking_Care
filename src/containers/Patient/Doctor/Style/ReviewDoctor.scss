@@ -1,0 +1,57 @@
+.review-medical-service-doctor {
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    .evaluate {
+        display: flex;
+        align-items: center;
+
+        &-star {
+            display: flex;
+
+            &-item {
+                cursor: pointer;
+                color: lightgray;
+                font-size: 24px;
+                margin-right: 5px;
+
+                &.active {
+                    color: orange;
+                }
+            }
+        }
+    }
+    .write-comment {
+        display: flex;
+        flex-direction: column;
+
+        &-text {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid lightgray;
+            border-radius: 5px;
+            resize: none;
+            font-size: 14px;
+
+            &:focus {
+                outline: none;
+                border-color: dodgerblue;
+            }
+        }
+
+        &-submit {
+            background-color: dodgerblue;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.4rem;
+            transition: all 0.2s linear;
+            width: 10%;
+            &:hover {
+                cursor: pointer;
+                opacity: 0.9;
+                scale: 1.02;
+            }
+        }
+    }
+}

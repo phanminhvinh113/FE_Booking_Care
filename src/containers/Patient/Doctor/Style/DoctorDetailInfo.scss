@@ -1,0 +1,107 @@
+.detail-info-doctor-id {
+    .intro-doctor {
+        padding: 15px 0;
+        display: flex;
+        align-items: center;
+
+        .left {
+            img {
+                height: 120px;
+                width: 120px;
+                border-radius: 50%;
+            }
+            margin-right: 15px;
+        }
+        .right {
+            max-width: 574px;
+            h1 {
+                font-size: 33px;
+                margin-bottom: 10px;
+            }
+            .description {
+                font-size: 13px;
+                color: #555555c4;
+            }
+        }
+    }
+    .schedule-doctor-detail {
+        padding: 15px;
+        padding-bottom: 0;
+
+        .schedule-range-time {
+            width: 50%;
+            padding-right: 10px;
+        }
+        .content-schdule-detail {
+            display: flex;
+        }
+        .day-of-week {
+            .select {
+                padding: 5px 10px;
+                border: none;
+                outline: none;
+                border-bottom: 1px solid rgb(153, 153, 153);
+                color: #3384c5;
+                font-weight: 600;
+                option {
+                    &:nth-child(1) {
+                        text-transform: capitalize;
+                    }
+                }
+            }
+        }
+        .info-price {
+            padding-left: 15px;
+            border-left: 1px solid #eee;
+            width: 45%;
+        }
+        .range-time {
+            flex-wrap: wrap;
+            button {
+                padding: 10px 10px;
+                border: 1.5px solid transparent;
+                border-radius: 5px;
+                margin: 8px 5px;
+                box-sizing: border-box;
+                min-width: 160px;
+                background-color: #fff8ae;
+                &:hover {
+                    border: 1.5px solid #3384c5;
+                }
+            }
+        }
+        .price-booked {
+            font-size: 12px;
+            color: #333;
+            margin: 8px 0;
+        }
+        .insurance-apply {
+            display: flex;
+        }
+    }
+    .detail-info {
+        padding: 15px 0;
+        background-color: #ccd0d533;
+        border-top: 1px solid #ccc;
+        h2 {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        li {
+            color: #545050;
+        }
+    }
+}
+.modal-booking-schedule-medical {
+    .modal-title {
+        display: flex !important;
+    }
+    .header {
+        display: flex;
+        .left {
+            img {
+                border-radius: 50%;
+            }
+        }
+    }
+}

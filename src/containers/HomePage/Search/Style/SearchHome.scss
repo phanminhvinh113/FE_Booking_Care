@@ -1,0 +1,168 @@
+.search-home-page {
+    position: relative;
+    background: #f7d800;
+    min-width: 300px;
+    max-width: 30vw;
+    color: #333;
+    outline: none;
+    border-radius: 25px;
+    border: 1px solid transparent;
+    line-height: 50px;
+    min-height: 50px;
+    padding-left: 50px;
+    padding-right: 25px;
+    display: flex;
+    margin: 0 auto;
+    // &::before {
+    //     content: '';
+    //     position: absolute;
+    //     top: 50px;
+    //     right: 0;
+    //     width: 100%;
+    //     height: 60vh;
+    //     background-color: transparent;
+    //     z-index: 6;
+    // }
+    a {
+        text-decoration: none;
+        color: #333;
+    }
+    button {
+        border: none;
+        background-color: transparent;
+        position: absolute;
+        left: 15px;
+    }
+    input {
+        border: none;
+        outline: none;
+        background-color: transparent;
+        width: 100%;
+    }
+
+    .content-searching {
+        visibility: visible;
+        position: absolute;
+        top: 52px;
+        right: 0;
+        width: 100%;
+        min-height: 50px;
+        max-height: 65vh;
+        background-color: #fff;
+        border-radius: 3px;
+        z-index: 5;
+        box-shadow: 2px 0 2px 0 #ccc;
+        overflow-y: auto;
+        transition: all ease-in-out 0.2s;
+        &::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgb(218, 218, 218);
+            border-radius: 5px;
+        }
+
+        /* Handle on hover */
+        &::-webkit-scrollbar-thumb:hover {
+            background: #ccc;
+            border-radius: 5px;
+        }
+    }
+    .content-searching.hidden {
+        visibility: hidden;
+    }
+    .header-menu-search {
+        width: 100%;
+        color: #555454c7;
+        display: flex;
+        background: #f5f5f5;
+        padding: 8px 10px;
+        font-weight: bold;
+    }
+    .specialty {
+        .item-specialty {
+            padding: 0 5px;
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            img {
+                height: 35px;
+                width: 35px;
+                margin-right: 5px;
+            }
+            &:hover span {
+                opacity: 0.8;
+            }
+        }
+    }
+    .doctor {
+        .item-doctor {
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            img {
+                height: 35px;
+                width: 35px;
+                margin-right: 5px;
+            }
+            .more {
+                width: 90%;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                h6 {
+                    margin-left: 5px;
+                    font-size: 1.1rem;
+                    margin-top: -12px;
+                }
+                span {
+                    font-size: 1.4rem;
+                }
+            }
+
+            &:hover span {
+                opacity: 0.8;
+            }
+        }
+    }
+    .clinic {
+        white-space: nowrap;
+        .item-clinic {
+            padding: 0 5px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            div {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            cursor: pointer;
+            img {
+                height: 35px;
+                width: 35px;
+                margin-right: 5px;
+            }
+            span {
+                font-size: 1.4rem;
+            }
+            &:hover span {
+                opacity: 0.8;
+            }
+        }
+    }
+}

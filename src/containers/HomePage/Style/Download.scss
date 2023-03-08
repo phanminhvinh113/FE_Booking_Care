@@ -1,0 +1,42 @@
+.section_download_home_page {
+    padding: 40px 15px;
+    border-top: 3px solid #efeef5;
+    border-bottom: 3px solid #efeef5;
+    .content_download {
+        background-image: url('https://bookingcare.vn/assets/anh/bookingcare-app-2020.png');
+        background-repeat: no-repeat;
+        background-size: 200px auto;
+        background-position-x: 20vw;
+        padding-top: 40px;
+        padding-bottom: 50px;
+        text-align: center;
+    }
+    .title_download {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin: 0;
+        padding: 0;
+        margin-bottom: 15px;
+    }
+    .benefit_app {
+        svg {
+            color: #45c3d2;
+            margin-right: 5px;
+        }
+        margin: 5px;
+        display: block;
+    }
+    .store-download {
+        margin: 10px;
+        img {
+            margin: 0 6px;
+        }
+    }
+    .link_auto_download {
+        font-style: italic;
+        margin-top: 10px;
+        text-decoration: none;
+        outline: none;
+        color: #45c3d2;
+    }
+}

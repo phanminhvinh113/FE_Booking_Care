@@ -1,0 +1,126 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+#root {
+    body {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+}
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.container_login_background {
+    height: 100vh;
+    box-sizing: border-box;
+    background-color: rgb(34, 193, 195);
+    background: linear-gradient(135deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
+    font-family: 'work sans';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .login_form {
+        margin-top: -8px;
+        max-width: 500px;
+        min-width: 350px;
+        width: 30%;
+
+        background-color: #ffffff;
+        border-radius: 25px;
+    }
+    .content {
+        box-shadow: none;
+
+        input {
+            font-size: 1.8rem;
+            padding: 8px;
+        }
+        label {
+            font-size: 1.8rem;
+        }
+    }
+    .header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 70px;
+        h2 {
+            font-size: 2.7rem;
+            font-weight: 700;
+        }
+    }
+    .Email {
+        margin-bottom: 26px;
+    }
+    footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+
+        button {
+            border-radius: 25px;
+            width: 60%;
+            height: 40px;
+            font-size: 1.7rem;
+            color: white !important;
+            font-weight: 700;
+            background: rgb(34, 193, 195);
+            background: linear-gradient(
+                90deg,
+                rgba(34, 193, 195, 1) 0%,
+                rgba(253, 187, 45, 1) 100%
+            );
+            border: 0px;
+            cursor: pointer !important;
+            transition: opacity 0.25s ease-out;
+            &:hover {
+                opacity: 0.9;
+            }
+        }
+    }
+    .btnLogIn {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .fb_icon {
+            margin: 0 5px;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background-color: #1977f3;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .gg_icon {
+            margin: 0 5px;
+            cursor: pointer;
+            img {
+                width: 25px;
+            }
+        }
+    }
+    .Password {
+        position: relative;
+        .eyeSlash {
+            position: absolute;
+            right: 10px;
+            top: 42px;
+            cursor: pointer;
+        }
+    }
+    .errMessage {
+        margin-top: 7px;
+        font-style: italic;
+        color: #f73131;
+    }
+}

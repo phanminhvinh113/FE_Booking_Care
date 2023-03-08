@@ -1,0 +1,85 @@
+.home-header-container {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    .home-header-content {
+        width: 100vw;
+        min-height: 58px;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+    .header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        svg {
+            width: 32px;
+            font-size: 2.4rem;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+        .logo {
+            height: 40px;
+            width: 160px;
+            background: url('../../../assets/images/bookingcare-logo.svg') no-repeat center;
+        }
+    }
+    .body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        div {
+            margin: 0 20px;
+        }
+        a {
+            display: flex;
+            outline: none;
+            color: #333;
+            font-weight: bold;
+            font-size: 12px;
+            text-decoration: none;
+        }
+        span {
+            font-weight: lighter;
+            font-size: 10px;
+            display: block;
+        }
+    }
+    .footer {
+        span {
+            color: #969495;
+            font-weight: 600;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+    }
+    .language {
+        display: flex;
+        .vi {
+            margin: 0 5px;
+            cursor: pointer;
+            opacity: 0.3;
+            &.active {
+                opacity: 1;
+            }
+            &:hover {
+                opacity: 1;
+            }
+        }
+        .en {
+            cursor: pointer;
+            opacity: 0.3;
+            &:hover {
+                opacity: 1;
+            }
+            &.active {
+                opacity: 1;
+            }
+        }
+        .active {
+            color: #45c3d2;
+        }
+    }
+}

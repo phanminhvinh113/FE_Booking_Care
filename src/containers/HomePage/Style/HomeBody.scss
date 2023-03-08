@@ -1,0 +1,67 @@
+.home-body-container {
+    background: url('../../../assets/images/bookingcare-cover-4.jpg') no-repeat center;
+    background-size: cover;
+    background-position: center;
+
+    header {
+        min-height: 60vh;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.25), rgba(255, 255, 255, 0.1));
+        padding: 45px 0;
+        color: #333;
+        text-align: center;
+    }
+    .header {
+        h1 {
+            font-size: 32px;
+            color: #fff;
+            font-weight: 100;
+            text-shadow: 1px 1px 1px #333;
+            margin-bottom: 0.5rem;
+        }
+        span {
+            font-size: 32px;
+            font-weight: 600;
+            text-shadow: 1px 1px 1px #333;
+            color: #fff;
+        }
+    }
+    .service-app {
+        background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 1));
+        padding-top: 30px;
+        padding-bottom: 20px;
+    }
+    .wrapper-service {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        .content-service {
+            width: 20%;
+            text-align: center;
+            cursor: pointer;
+            &:hover {
+                color: #45c3d2;
+            }
+            div {
+                background: #fff;
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+                position: relative;
+                margin: auto;
+                img {
+                    width: 75%;
+                    position: absolute;
+                    top: 5px;
+                    right: 11%;
+                }
+            }
+        }
+    }
+}
+.loading-home-page {
+    position: fixed;
+    top: 35px;
+    left: 50vw;
+    z-index: 100;
+}

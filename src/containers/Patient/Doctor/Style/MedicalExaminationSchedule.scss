@@ -1,0 +1,53 @@
+.schedule-medical-booking-doctor {
+    padding: 15px;
+    padding-bottom: 0;
+
+    .schedule-range-time {
+        width: 50%;
+        padding-right: 10px;
+    }
+    .content-schdule-detail {
+        display: flex;
+    }
+    .day-of-week {
+        .select {
+            padding: 5px 10px;
+            border: none;
+            outline: none;
+            border-bottom: 1px solid rgb(153, 153, 153);
+            color: #3384c5;
+            font-weight: 600;
+            option {
+                &:nth-child(1) {
+                    text-transform: capitalize;
+                }
+            }
+        }
+    }
+    .info-price {
+        padding-left: 15px;
+        border-left: 1px solid #eee;
+        width: 45%;
+    }
+    .range-time {
+        margin-top: 5px;
+        flex-wrap: wrap;
+        button {
+            padding: 10px 10px;
+            border: 1.5px solid transparent;
+            border-radius: 5px;
+            margin: 8px 5px;
+            box-sizing: border-box;
+            min-width: 160px;
+            background-color: #fff8ae;
+            &:hover {
+                border: 1.5px solid #3384c5;
+            }
+        }
+    }
+    .price-booked {
+        font-size: 12px;
+        color: #333;
+        margin: 8px 0;
+    }
+}
