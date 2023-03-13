@@ -41,14 +41,14 @@ class SpecialtyDetailInfo extends Component {
             if (res1 && res1.errCode === 0 && res2 && res2.errCode === 0) {
                 this.setState({
                     specialtlyInfo: res1.data,
-                    image: Buffer.from(res1.data.image, 'base64').toString('binary'),
+                    image: res1.data?.image ? Buffer.from(res1.data.image, 'base64').toString('binary') : null,
                     listDoctor: res2.data,
                     schedule: res2.scheduleDoctor,
                     isLoading: false,
                 });
             }
             //TITLE
-            document.title = res1.data?.name || '';
+            document.title = res1.data?.name || 'Booking Care';
         }
         // SCROLL
         document.body.scrollTop = this.props.postionSpecialtyPage;

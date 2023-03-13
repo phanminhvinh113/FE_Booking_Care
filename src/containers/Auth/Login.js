@@ -8,8 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF } from '@fortawesome/free-brands-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { handleLogInUserService } from '../../services/userService';
-import { auth, path, ROLE_USER } from '../../utils/constant';
+import { auth, path, ROLE_USER, TITLE_BROWSWER } from '../../utils/constant';
 import './Login.scss';
+import { Link } from 'react-router-dom';
 
 class Login extends Component {
     ///////////////////\\INITIAL VALUES\\///////////////////////////////////
@@ -25,7 +26,9 @@ class Login extends Component {
         };
     }
     //
-    componentDidMount() {}
+    componentDidMount() {
+        document.title = TITLE_BROWSWER.Login;
+    }
     componentDidUpdate(prevProps, prevState, snapshot) {}
     //
 
@@ -168,6 +171,9 @@ class Login extends Component {
                                     alt=""
                                 />
                             </div>
+                        </div>
+                        <div className="register">
+                            <Link to={path.REGISTER}>Sign Up</Link>
                         </div>
                     </div>
                 </div>

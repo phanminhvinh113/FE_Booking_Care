@@ -25,10 +25,10 @@ class Conversation extends Component {
         };
         this.textInput = React.createRef();
         this.messagesEndRef = React.createRef();
+        this.messageContent = React.createRef();
     }
     //
     componentDidMount() {
-        console.log(this.props.inforDoctor);
         this.messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
     //
@@ -84,6 +84,12 @@ class Conversation extends Component {
         this.textInput.current.textContent = null;
         this.textInput.current.focus();
     };
+    //
+    handleScrollContentMess = (e) => {
+        // console.log(e);
+        // document.body.endOfPage;
+        // console.log(this.messageContent.current.endOfPage);
+    };
 
     render() {
         return (
@@ -94,7 +100,7 @@ class Conversation extends Component {
                         <FontAwesomeIcon icon={faXmark} />
                     </CloseBtn>
                 </header>
-                <div className="cotent-text">
+                <div className="cotent-text" ref={this.messageContent} onScroll={(e) => this.handleScrollContentMess(e)}>
                     {!!this.state.arrMess &&
                         this.state.arrMess.map((item) => {
                             item.text = item.text.replace(/^\s+|\s+$/g, '');

@@ -70,11 +70,7 @@ body {
             color: white !important;
             font-weight: 700;
             background: rgb(34, 193, 195);
-            background: linear-gradient(
-                90deg,
-                rgba(34, 193, 195, 1) 0%,
-                rgba(253, 187, 45, 1) 100%
-            );
+            background: linear-gradient(90deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
             border: 0px;
             cursor: pointer !important;
             transition: opacity 0.25s ease-out;
@@ -122,5 +118,14 @@ body {
         margin-top: 7px;
         font-style: italic;
         color: #f73131;
+    }
+    .register {
+        float: right;
+        margin: 20px 0;
+        a {
+            font-size: 1.6rem;
+            color: #45c3d2;
+            font-weight: 600;
+        }
     }
 }

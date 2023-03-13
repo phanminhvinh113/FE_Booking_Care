@@ -73,6 +73,11 @@ class HomeHeader extends Component {
                                 <span onClick={() => this.changeLanguage(languages.EN)}>EN</span>
                             </div>
                         </div>
+                        <div className="loggin-logout">
+                            <Link to={this.props.isLoggedIn ? path.LOG_OUT : path.LOGIN}>
+                                {this.props.isLoggedIn ? 'Logout' : 'Login'}
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </>

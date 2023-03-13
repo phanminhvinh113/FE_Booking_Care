@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-// import { ConnectedRouter as Router } from 'connected-react-router';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../components/GlobalStyle/Globalstyle.scss';
@@ -11,7 +10,7 @@ import { userIsAuthenticated, userIsNotAuthenticated } from '../hoc/authenticati
 import { path } from '../utils';
 
 import Home from '../routes/Home';
-//import Login from "../routes/Login";
+import Register from './Auth/Register';
 import Login from './Auth/Login';
 import System from '../routes/System';
 import Doctor from '../routes/Doctor';
@@ -32,9 +31,7 @@ import ReviewDoctor from './Patient/Doctor/ReviewDoctor';
 class App extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            prevY: 0,
-        };
+        this.state = {};
     }
 
     handlePersistorState = () => {
@@ -62,6 +59,7 @@ class App extends Component {
                         {/* <CustomScrollbar style={{ height: '100vh', width: '100%' }}> */}
                         <Switch>
                             <Route exact path={path.HOME} component={Home} />
+                            <Route path={path.REGISTER} component={Register} />
                             <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
                             <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
                             <Route path={path.DOCTOR} component={userIsAuthenticated(Doctor)} />

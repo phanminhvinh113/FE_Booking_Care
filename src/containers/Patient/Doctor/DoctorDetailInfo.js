@@ -26,13 +26,13 @@ class DoctorDetailInfo extends Component {
 
     //// DID MOUNT ////
     async componentDidMount() {
-        document.body.scrollTop = this.props.positionDoctorPage;
         document.title = this.props.inforDoctor.DoctorInfo?.name;
+        document.body.scrollTop = this.props.positionDoctorPage;
         const { match, getDetailInfoDoctor } = this.props;
         if (match && match.params.id) {
-            const [{ data: res }, res2] = await Promise.all([
-                getFeedbackDoctor(match.params.id),
+            const [res2, { data: res }] = await Promise.all([
                 getDetailInfoDoctor(match.params.id),
+                getFeedbackDoctor(match.params.id),
             ]);
 
             if (res && res.errCode === 0) {

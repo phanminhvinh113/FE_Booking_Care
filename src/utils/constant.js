@@ -1,6 +1,7 @@
 export const path = {
     HOME: '/',
     HOMEPAGE: '/home',
+    REGISTER: '/register',
     LOGIN: '/login',
     LOG_OUT: '/logout',
     SYSTEM: '/system',
@@ -49,8 +50,29 @@ export const auth = {
     TOKEN_EXPRIE: 'jwt expired',
 };
 export const TITLE_BROWSWER = {
+    Login: 'Log In',
+    Register: ' Register Account',
     Home_Page: ' Booking Care - Nền tảng y tế',
     doctor_seacrch: 'Tìm kiếm bác sĩ',
     specialtys: 'Chuyên Khoa',
     clinic_search: 'Tìm kiếm phòng khám',
+};
+export const VALIDATE = {
+    firstName: 'firstName',
+    lastName: 'lastName',
+    email: 'email',
+    password: 'password',
+    confirmPassword: 'confirmPassword',
+};
+
+export const VALIDATE_CONTENT = {
+    Is_Required: 'Vui lòng nhập trường này.',
+    Is_Email: 'Email Không Đúng Định Dạng.',
+    Include_Number: 'Phải bao gồm cả số.',
+    Not_Include_Number: 'Không được nhập số.',
+    Include_Special_Character: 'Phải có ít nhất 1 kí tự đặc biệt.',
+    Not_Include_Include_Special_Character: 'Không được nhập kí tự đặc biệt.',
+    Include_Character: 'Phải nhập chữ.',
+    Not_Include_Character: ' Không được nhập chữ.',
+    Confirm_Password: 'Mật khẩu nhập lại không đúng.',
 };

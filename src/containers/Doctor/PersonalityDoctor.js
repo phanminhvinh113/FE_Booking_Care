@@ -62,7 +62,7 @@ class PersonalityDoctor extends Component {
                 const selectedSpecialty = listSpecialty.find((item) => item.value === specialtyId);
                 this.setState({
                     doctorId: userInfo.id,
-                    UrlImage: Buffer.from(image, 'base64').toString('binary'),
+                    UrlImage: image,
                     name,
                     selectedPrice,
                     selectedProvince,

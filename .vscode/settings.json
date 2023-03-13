@@ -3,5 +3,12 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "[dotenv]": {
         "editor.defaultFormatter": "foxundermoon.shell-format"
-    }
+    },
+    "notebook.showCellStatusBar": "visible",
+    "search.decorations.colors": true,
+    "search.decorations.badges": true,
+    "search.showLineNumbers": false,
+    "chatgpt.gpt3.apiKey": "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",
+    "chatgpt.promptPrefix.customPrompt2-enabled": true,
+    "chatgpt.promptPrefix.customPrompt1-enabled": true
 }

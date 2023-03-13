@@ -36,7 +36,6 @@ class MessageDoctorPatient extends Component {
             senderId,
             receiverId,
         });
-       
     };
     render() {
         return (
