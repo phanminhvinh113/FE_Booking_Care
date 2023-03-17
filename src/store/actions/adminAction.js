@@ -76,17 +76,6 @@ export const createUserFailed = () => ({
 export const getAllUser = () => {
     return async (dispatch, getState) => {
         try {
-            const { exp } = jwtDecode(sessionStorage.getItem('access_token'));
-            if (exp < new Date().getTime() / 1000) {
-                const {
-                    data: { errCode, message, newAccessToken },
-                } = await refreshToken();
-                if (errCode === 0 && !!newAccessToken) {
-                    await storeAccessToken(newAccessToken);
-                } else {
-                    dispatch(getAllUserFailed({ errCode: -2, message: message }));
-                }
-            }
             const { data: res } = await getAllUsers('ALL');
             if (res && res.errCode === 0) {
                 dispatch(getAllUserSuccess(res.users));
@@ -98,11 +87,7 @@ export const getAllUser = () => {
         }
     };
 };
-//
-const storeAccessToken = async (token) => {
-    sessionStorage.removeItem('access_token');
-    sessionStorage.setItem('access_token', token);
-};
+
 //
 export const getAllUserSuccess = (users) => ({
     type: actionTypes.FETCH_API_ALL_USER_SUCCESS,

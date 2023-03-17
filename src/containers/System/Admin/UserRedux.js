@@ -43,23 +43,14 @@ class UserRedux extends Component {
     ////////////
     async componentDidMount() {
         await Promise.all(this.promises);
-        if (
-            this.props.auth.errCode === -2 ||
-            this.props.auth.message === auth.AUTH_FAILED ||
-            this.props.auth.message === auth.TOKEN_EXPRIE
-        ) {
+        if (this.props.auth.errCode === -2 || this.props.auth.message === auth.AUTH_FAILED || this.props.auth.message === auth.TOKEN_EXPRIE) {
             this.props.processLogout();
         }
-        console.log(this.getCookie('refresh_token'));
     }
     /////////
     componentDidUpdate(prevProps, prevState, snapshot) {
         const { dataUser } = this.props;
-        if (
-            this.props.auth.errCode === -2 ||
-            this.props.auth.message === auth.AUTH_FAILED ||
-            this.props.auth.message === auth.TOKEN_EXPRIE
-        ) {
+        if (this.props.auth.errCode === -2 || this.props.auth.message === auth.AUTH_FAILED || this.props.auth.message === auth.TOKEN_EXPRIE) {
             this.props.processLogout();
         }
         if (prevProps.dataUser !== dataUser) {
@@ -340,12 +331,7 @@ class UserRedux extends Component {
                         <label htmlFor="inputState" className="form-label">
                             Gender
                         </label>
-                        <select
-                            id="inputState"
-                            className="form-select"
-                            onChange={(e) => this.handleOnChangeInput(e, 'gender')}
-                            value={gender}
-                        >
+                        <select id="inputState" className="form-select" onChange={(e) => this.handleOnChangeInput(e, 'gender')} value={gender}>
                             <option selected value="">
                                 Choose...
                             </option>
@@ -415,10 +401,7 @@ class UserRedux extends Component {
                                     }}
                                 ></div>
                                 {this.state.isOpenImage && (
-                                    <Lightbox
-                                        mainSrc={this.state.urlImage}
-                                        onCloseRequest={() => this.setState({ isOpenImage: false })}
-                                    />
+                                    <Lightbox mainSrc={this.state.urlImage} onCloseRequest={() => this.setState({ isOpenImage: false })} />
                                 )}
                             </>
                         )}

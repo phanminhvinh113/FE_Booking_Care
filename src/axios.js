@@ -1,9 +1,18 @@
 import axios from 'axios';
-
+import jwtDecode from 'jwt-decode';
 const instance = axios.create({
     baseURL: process.env.REACT_APP_BACKEND_URL,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    params: {
+        nonce: '123',
+        stime: new Date().getTime(),
+        sessionId: '123',
+    },
     withCredentials: true,
 });
+// REFRESH TOKEN
 
 // const createError = (httpStatusCode, statusCode, errorMessage, problems, errorCode = '') => {
 //     const error = new Error();

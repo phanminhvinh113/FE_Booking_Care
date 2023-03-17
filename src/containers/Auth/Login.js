@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 import { withRouter } from 'react-router';
-import brcypt from 'bcryptjs';
 import * as actions from '../../store/actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF } from '@fortawesome/free-brands-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { handleLogInUserService } from '../../services/userService';
-import { auth, path, ROLE_USER, TITLE_BROWSWER } from '../../utils/constant';
-import './Login.scss';
+import { path, ROLE_USER, TITLE_BROWSWER } from '../../utils/constant';
 import { Link } from 'react-router-dom';
+import './Login.scss';
 
 class Login extends Component {
     ///////////////////\\INITIAL VALUES\\///////////////////////////////////
@@ -154,7 +152,7 @@ class Login extends Component {
                                 />
                             )}
                         </div>
-                        {this.state.isErrLogin && <div className="errMessage">{this.state.errMessage}</div>}
+                        {this.state?.isErrLogin && <div className="errMessage">{this.state?.errMessage}</div>}
 
                         <footer>
                             <button onClick={this.handleLogIn} className="btn">

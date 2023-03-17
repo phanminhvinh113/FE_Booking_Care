@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import AavatarUser from './User/AavatarUser';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import { FormattedMessage } from 'react-intl';
@@ -73,11 +74,12 @@ class HomeHeader extends Component {
                                 <span onClick={() => this.changeLanguage(languages.EN)}>EN</span>
                             </div>
                         </div>
-                        <div className="loggin-logout">
-                            <Link to={this.props.isLoggedIn ? path.LOG_OUT : path.LOGIN}>
-                                {this.props.isLoggedIn ? 'Logout' : 'Login'}
-                            </Link>
-                        </div>
+                        {!this.props.isLoggedIn && (
+                            <div className="loggin">
+                                <Link to={path.LOGIN}>Login</Link>
+                            </div>
+                        )}
+                        {this.props?.isLoggedIn && <AavatarUser />}
                     </div>
                 </div>
             </>

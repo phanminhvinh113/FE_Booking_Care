@@ -93,7 +93,7 @@ class Conversation extends Component {
 
     render() {
         return (
-            <div className={`conversation-patent-doctor ${this.props.isOpen ? 'open' : 'close'}`}>
+            <div ref={this.props.ref} className={`conversation-patent-doctor ${this.props.isOpen ? 'open' : 'close'}`}>
                 <header className="header">
                     <h4>{_.get(this.props.inforDoctor, 'DoctorInfo.name', 'Nhắn tin cùng bác sĩ')}</h4>
                     <CloseBtn onClick={this.props.Toggle}>
@@ -115,7 +115,7 @@ class Conversation extends Component {
                                         src={
                                             item.id === this.props.inforDoctor.id
                                                 ? _.get(this.props.inforDoctor, 'image', BookingCareAvatar)
-                                                : GuestAvatar
+                                                : _.get(this.props.userInfo, 'image', 'false') || GuestAvatar
                                         }
                                     />
                                     <div className="text-and-time">

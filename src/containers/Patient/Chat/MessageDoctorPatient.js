@@ -13,9 +13,13 @@ class MessageDoctorPatient extends Component {
             isOpenConversation: false,
             text: '',
         };
+        this.MessIcon = React.createRef();
+        this.Conversation = React.createRef();
         this.socket = React.createRef();
+        this.handleClickOutSide = this.handleClickOutSide.bind(this);
     }
     componentDidMount() {
+        document.addEventListener('mousedown', this.handleClickOutSide);
         if (this.props.userInfo?.id) {
             this.socket.current = io.connect('http://localhost:8090');
             if (this.props.userInfo?.id) {
@@ -24,12 +28,24 @@ class MessageDoctorPatient extends Component {
         }
     }
     componentDidUpdate(prevProps, prevState, snapshot) {}
-    componentWillUnmount() {}
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutSide);
+    }
+    //
     handleOpenConversation = () => {
         this.setState({
             isOpenConversation: !this.state.isOpenConversation,
         });
     };
+    //
+    handleClickOutSide = (e) => {
+        if (this.Conversation && !this.Conversation.current.contains(e.target) && !this.MessIcon.current.contains(e.target)) {
+            this.setState({
+                isOpenConversation: false,
+            });
+        }
+    };
+    //
     sendMessageToServer = (senderId, receiverId, text) => {
         this.socket.current.emit('send-message', {
             text,
@@ -37,13 +53,14 @@ class MessageDoctorPatient extends Component {
             receiverId,
         });
     };
+    //
     render() {
         return (
             <div className="container-message-patient-doctor">
-                <div className="img-message" onClick={this.handleOpenConversation}>
+                <div ref={this.MessIcon} className="img-message" onClick={this.handleOpenConversation}>
                     <img src={iconMessage} />
                 </div>
-                <div>
+                <div ref={this.Conversation}>
                     <Conversation
                         Toggle={this.handleOpenConversation}
                         isOpen={this.state.isOpenConversation}

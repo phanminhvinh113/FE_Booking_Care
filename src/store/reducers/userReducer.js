@@ -19,11 +19,15 @@ const userReducer = (state = initialState, action) => {
                 isLoggedIn: false,
                 userInfo: null,
             };
-        case actionTypes.PROCESS_LOGOUT:
+        case actionTypes.PROCESS_LOGOUT_SUCESS:
             return {
                 ...state,
                 isLoggedIn: false,
                 userInfo: null,
+            };
+        case actionTypes.PROCESS_LOGOUT_FALIED:
+            return {
+                ...state,
             };
         default:
             return state;

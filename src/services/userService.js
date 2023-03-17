@@ -1,41 +1,28 @@
 import axios from '../axios';
+import instance from './interceptorService';
 //
 
 export const handleLogInUserService = (email, password) => {
     return axios.post('/api/login', { email, password });
 };
 
-export const getAllUsers = (inputId) => {
-    return axios.get(`/api/get-all-users?id=${inputId}`, {
+export const handleLogOutUserService = (data) => {
+    return instance.post('/api/logout', {
+        data,
         headers: {
-            access_token: `Bearer ${sessionStorage.getItem('access_token')}`,
+            Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
         },
     });
 };
-export const refreshToken = () => {
-    return axios.post('/api/refresh-token');
+
+export const getAllUsers = (inputId) => {
+    return instance.get(`/api/get-all-users?id=${inputId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+        },
+    });
 };
 
-// export const getAllUsersInterCeptor = axios.interceptors.request.use(
-//     async (config) => {
-//         // if (config.url.indexOf('/login') >= 0 || config.url.indexOf('/refresh-token') >= 0) {
-//         //     return config;
-//         // }
-//         const accessToken = sessionStorage.getItem('access_token');
-//         const { exp } = jwtDecode(accessToken);
-//         if (exp < new Date().getTime() / 1000) {
-//             const { newAccessToken } = await refreshToken();
-//             sessionStorage.setItem('access_token', newAccessToken);
-//             await getAllUsers('ALL');
-//         } else {
-//             await getAllUsers('ALL');
-//         }
-//         return config;
-//     },
-//     (error) => {
-//         Promise.reject(error);
-//     },
-// );
 export const createNewUserService = (data) => {
     return axios.post('/api/create-new-user', data);
 };
