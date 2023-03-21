@@ -3,6 +3,8 @@ import actionTypes from '../actions/actionTypes';
 const initialState = {
     isLoggedIn: false,
     userInfo: null,
+    Conversation: null,
+    patientInfo: null,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -29,6 +31,18 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
             };
+        case actionTypes.FETCH_MESSAGE_PATIENT_DOCTOR_SUCCESS: {
+            return {
+                ...state,
+                Conversation: action.data,
+            };
+        }
+        case actionTypes.SELECT_CONVERSATION_PATIENT: {
+            return {
+                ...state,
+                patientInfo: action.patientInfo,
+            };
+        }
         default:
             return state;
     }

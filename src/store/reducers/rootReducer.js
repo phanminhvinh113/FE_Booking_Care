@@ -14,12 +14,6 @@ const persistCommonConfig = {
     stateReconciler: autoMergeLevel2,
 };
 
-// const adminPersistConfig = {
-//     ...persistCommonConfig,
-//     key: 'admin',
-//     whitelist: ['isLoggedIn', 'adminInfo']
-// };
-
 const userPersistConfig = {
     ...persistCommonConfig,
     key: 'user',
@@ -30,11 +24,16 @@ const appPersistConfig = {
     key: 'app',
     whitelist: ['language', 'systemMenuPath', 'positionHomePage', 'postionSpecialtyPage', 'positionDoctorPage'],
 };
-
+const patientPersistConfig = {
+    ...persistCommonConfig,
+    key: 'patient',
+    whitelist: ['patientInfo'],
+};
 export default (history) =>
     combineReducers({
         router: connectRouter(history),
         user: persistReducer(userPersistConfig, userReducer),
         app: persistReducer(appPersistConfig, appReducer),
+        patient: persistReducer(patientPersistConfig, userReducer),
         admin: adminReducer,
     });

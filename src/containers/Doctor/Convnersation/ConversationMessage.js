@@ -24,15 +24,20 @@ class ConversationMessage extends Component {
     //
     componentDidMount() {
         this.Message.current?.scrollIntoView({ behavior: 'smooth' });
+        this.props.socket.on('get-message', (message) => {
+            console.log(message);
+        });
     }
     //
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevState.arrMessage !== this.state.arrMessage) {
             this.Message.current?.scrollIntoView({ behavior: 'smooth' });
         }
-        this.props.socket.on('get-message', (message) => {
-            console.log(message);
-        });
+        if (this.props.socket) {
+            this.props.socket.on('get-message', (message) => {
+                console.log(message);
+            });
+        }
     }
     //
     handleOnChangeInput = (e) => {
@@ -50,8 +55,18 @@ class ConversationMessage extends Component {
         }
     };
     //
+    sendMessageToServer = (senderId, receiverId, text) => {
+        this.props.socket.emit('send-message', {
+            text,
+            senderId,
+            receiverId,
+            time: new Date().getTime(),
+        });
+    };
+    //
     sendMessage = () => {
         if (this.state.text.trim()) {
+            //this.sendMessageToServer(this.state?.text.trim(), _.get(this.props.doctorInfo, 'id', 'null'))
             this.setState({
                 arrMessage: [
                     ...this.state.arrMessage,

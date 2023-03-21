@@ -14,27 +14,14 @@ class ManageConversationDoctor extends Component {
             user: this.props.doctorInfo,
             userActive: [],
         };
-        this.socket = React.createRef();
+        this.socket = io.connect('http://localhost:8090');
     }
-    componentDidMount() {
+    async componentDidMount() {
+        //
         const { doctorInfo } = this.props;
-        //console.log(this.props.doctorInfo);
-        if (this.props.doctorInfo?.id) {
-            this.socket.current = io.connect('http://localhost:8090');
-            if (doctorInfo) {
-                this.socket.current.emit('add-new-user', doctorInfo?.id);
-                this.socket.current.on('get-user-active', (user) => {
-                    this.setState(
-                        {
-                            userActive: user,
-                        },
-                        () => {
-                            console.log(this.state.userActive);
-                        },
-                    );
-                });
-            }
-        }
+        // if (doctorInfo?.id) {
+        // }
+        //
     }
     componentDidUpdate(prevProps, prevState, snapshot) {}
     componentWillUnmount() {}
@@ -42,7 +29,7 @@ class ManageConversationDoctor extends Component {
         return (
             <Wrapper>
                 <ChatGroup socket={this.socket} />
-                <ConversationMessage socket={this.socket.current} />
+                <ConversationMessage socket={this.socket} />
             </Wrapper>
         );
     }

@@ -5,7 +5,7 @@ import instance from './interceptorService';
 export const handleLogInUserService = (email, password) => {
     return axios.post('/api/login', { email, password });
 };
-
+//
 export const handleLogOutUserService = (data) => {
     return instance.post('/api/logout', {
         data,
@@ -16,11 +16,7 @@ export const handleLogOutUserService = (data) => {
 };
 
 export const getAllUsers = (inputId) => {
-    return instance.get(`/api/get-all-users?id=${inputId}`, {
-        headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
-        },
-    });
+    return instance.get(`/api/get-all-users?id=${inputId}`);
 };
 
 export const createNewUserService = (data) => {
@@ -58,14 +54,23 @@ export const searchAllService = (inputSearch) => {
         },
     });
 };
+//
 export const evaluateMedicalDoctor = (data) => {
     return axios.post('/api/evaluate-doctor', data);
 };
-//////// GET TOP DOCTORS /////
-// export const getTopDoctorHomeService = (limit) => {
-//     return axios.get('/api/top-doctor-home', {
-//         params: {
-//             limit: limit,
-//         },
-//     });
-// };
+//
+export const getMessagePatientDoctorService = (patientId, doctorId) => {
+    return axios.get('/api/get_all_message', {
+        params: {
+            senderId: patientId,
+            receiverId: doctorId,
+        },
+    });
+};
+export const getAllConversationDoctorService = (doctorId) => {
+    return axios.get('/api/get_conversation_doctor', {
+        params: {
+            doctorId,
+        },
+    });
+};

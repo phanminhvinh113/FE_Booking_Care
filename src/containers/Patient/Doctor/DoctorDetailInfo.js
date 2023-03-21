@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { getFeedbackDoctor } from '../../../services/adminService';
-
+import _ from 'lodash';
 import * as actions from '../../../store/actions';
+import { getFeedbackDoctor } from '../../../services/adminService';
 import Footer from '../../HomePage/Footer';
 import MessageDoctorPatient from '../Chat/MessageDoctorPatient';
 import HeaderDefaultSection from '../HeaderDefaultSection';
@@ -12,9 +12,7 @@ import InfoAttached from './InfoAttached';
 import IntroduceDoctor from './IntroduceDoctor';
 import MedicalExaminaltionSchedule from './MedicalExaminaltionSchedule';
 import './Style/DoctorDetailInfo.scss';
-//
 
-/////
 class DoctorDetailInfo extends Component {
     constructor(props) {
         super(props);
@@ -26,15 +24,17 @@ class DoctorDetailInfo extends Component {
 
     //// DID MOUNT ////
     async componentDidMount() {
+        //SCROLL ON TOP AND SET TITLE
         document.title = this.props.inforDoctor.DoctorInfo?.name;
         document.body.scrollTop = this.props.positionDoctorPage;
+        //PROPS
         const { match, getDetailInfoDoctor } = this.props;
+        //CONDITION
         if (match && match.params.id) {
-            const [res2, { data: res }] = await Promise.all([
-                getDetailInfoDoctor(match.params.id),
-                getFeedbackDoctor(match.params.id),
-            ]);
-
+            const doctorId = match.params.id;
+            //GET API
+            const [res2, { data: res }] = await Promise.all([getDetailInfoDoctor(doctorId), getFeedbackDoctor(doctorId)]);
+            //SET STATE FEEBECK FROM USER
             if (res && res.errCode === 0) {
                 this.setState({
                     feedbacks: res.feedbacks,
@@ -83,15 +83,13 @@ class DoctorDetailInfo extends Component {
                         <div
                             className="container"
                             dangerouslySetInnerHTML={{ __html: doctor && doctor.Markdown ? doctor.Markdown.contentHTML : ' ' }}
-                        >
-                            {/* {doctor.Markdown.contentHTML} */}
-                        </div>
+                        ></div>
                     </div>
                     <div className="response-patient">
                         <FeedBackDoctor feedbacks={feedbacks} />
                     </div>
                     <div>
-                        <MessageDoctorPatient />
+                        <MessageDoctorPatient doctorId={match.params.id} />
                     </div>
                 </div>
                 <Footer />
@@ -105,6 +103,7 @@ const mapStateToProps = (state) => {
         position: state.app.position,
         inforDoctor: state.admin.inforDoctor,
         positionDoctorPage: state.app.positionDoctorPage,
+        userInfo: state.user.userInfo,
     };
 };
 

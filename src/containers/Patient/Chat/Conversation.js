@@ -15,13 +15,7 @@ class Conversation extends Component {
         this.state = {
             isTyping: false,
             textMessage: null || '',
-            arrMess: [
-                // {
-                //     id: _.get(this.props.inforDoctor, 'id', 'null'),
-                //     text: 'Bác có thể đặt câu hỏi ở đây...',
-                //     time: moment(new Date().getTime()).format(' DD/MM/YYYY - HH:mm'),
-                // },
-            ],
+            arrMess: [],
         };
         this.textInput = React.createRef();
         this.messagesEndRef = React.createRef();
@@ -30,11 +24,29 @@ class Conversation extends Component {
     //
     componentDidMount() {
         this.messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        this.props.socket.on('get-message', (message) => {
+            console.log(message);
+        });
+        if (this.props.Conversation) {
+            this.setState(
+                {
+                    arrMess: this.props.Conversation,
+                },
+                () => console.log(this.state.arrMess),
+            );
+        }
     }
     //
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevState.arrMess !== this.state.arrMess) {
             this.messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        if (prevProps.Conversation !== this.props.Conversation) {
+            this.setState({
+                arrMess: this.props.Conversation,
+            }),
+                () => console.log(this.state.arrMess);
         }
     }
     //INPUT
@@ -53,23 +65,18 @@ class Conversation extends Component {
     };
     //
     handleSendingMessageClick = () => this.sendMessage();
+    //
 
     //
     sendMessage = () => {
         if (this.state.textMessage.trim()) {
-            // Send message to server or display locally
-            // this.props.socket.emit('send-message', {
-            //     id: this.props.userInfo?.id || null,
-            //     text: this.state.textMessage,
-            // });
             this.props.sendMessage(this.props.userInfo?.id, this.props.inforDoctor?.id, this.state.textMessage);
             this.setState({
                 textMessage: '',
                 arrMess: [
                     ...this.state.arrMess,
                     {
-                        id: 'guest',
-                        //id: _.get(this.props.inforDoctor, 'id', 'null'),
+                        senderId: _.get(this.props.userInfo, 'id', 'guest'),
                         text: this.state.textMessage,
                         time: new Date(),
                     },
@@ -85,11 +92,6 @@ class Conversation extends Component {
         this.textInput.current.focus();
     };
     //
-    handleScrollContentMess = (e) => {
-        // console.log(e);
-        // document.body.endOfPage;
-        // console.log(this.messageContent.current.endOfPage);
-    };
 
     render() {
         return (
@@ -100,20 +102,21 @@ class Conversation extends Component {
                         <FontAwesomeIcon icon={faXmark} />
                     </CloseBtn>
                 </header>
-                <div className="cotent-text" ref={this.messageContent} onScroll={(e) => this.handleScrollContentMess(e)}>
+                <div className="cotent-text" ref={this.messageContent}>
                     {!!this.state.arrMess &&
-                        this.state.arrMess.map((item) => {
+                        this.state.arrMess.map((item, index) => {
                             item.text = item.text.replace(/^\s+|\s+$/g, '');
                             return (
                                 <div
+                                    key={index}
                                     className={`conversation-message ${
-                                        item.id === _.get(this.props.inforDoctor, 'id', 'null') ? 'doctor' : 'other'
+                                        item.senderId === _.get(this.props.inforDoctor, 'id', 'null') ? 'doctor' : 'other'
                                     }`}
                                     ref={this.messagesEndRef}
                                 >
                                     <img
                                         src={
-                                            item.id === this.props.inforDoctor.id
+                                            item.senderId === this.props.inforDoctor.id
                                                 ? _.get(this.props.inforDoctor, 'image', BookingCareAvatar)
                                                 : _.get(this.props.userInfo, 'image', 'false') || GuestAvatar
                                         }
@@ -154,6 +157,7 @@ const mapStateToProps = (state) => {
     return {
         inforDoctor: state.admin.inforDoctor,
         userInfo: state.user.userInfo,
+        Conversation: state.user.Conversation,
     };
 };
 
