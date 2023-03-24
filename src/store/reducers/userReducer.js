@@ -5,6 +5,7 @@ const initialState = {
     userInfo: null,
     Conversation: null,
     patientInfo: null,
+    listConversation: [],
 };
 
 const userReducer = (state = initialState, action) => {
@@ -26,6 +27,7 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 isLoggedIn: false,
                 userInfo: null,
+                patientInfo: null,
             };
         case actionTypes.PROCESS_LOGOUT_FALIED:
             return {
@@ -41,6 +43,23 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 patientInfo: action.patientInfo,
+            };
+        }
+        case actionTypes.FETCH_ALL_CONVERSATION_PATIENT_SUCCESS: {
+            return {
+                ...state,
+                listConversation: action.data,
+            };
+        }
+        case actionTypes.FETCH_ALL_CONVERSATION_PATIENT_FAILED: {
+            return {
+                ...state,
+            };
+        }
+        case actionTypes.SORT_LIST_CONVERSATION: {
+            return {
+                ...state,
+                listConversation: action.payload,
             };
         }
         default:

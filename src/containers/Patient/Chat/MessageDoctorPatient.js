@@ -23,19 +23,22 @@ class MessageDoctorPatient extends Component {
         document.addEventListener('mousedown', this.handleClickOutSide);
         // EMIT USER ACTIVE
         if (this.props.userInfo?.id) {
-            if (this.props.userInfo?.id) {
-                this.socket.emit('add-new-user', this.props.userInfo?.id);
-            }
+            await this.socket.emit('add-new-user', this.props.userInfo?.id);
+        }
+        //GET USER ACTIVE
+        this.socket.on('get-user-active', (users) => {
+            console.log(users);
+        });
+    }
+    //UPDATE
+    async componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.userInfo !== this.props.userInfo && this.props.userInfo?.id) {
+            await this.socket.emit('add-new-user', this.props.userInfo.id);
         }
     }
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.Conversation !== this.props.Conversation) {
-            this.setState({
-                Conversation: this.props.Conversation,
-            });
-        }
-    }
-    componentWillUnmount() {
+    // UN MOUNTED
+    async componentWillUnmount() {
+        await this.socket.disconnect();
         document.removeEventListener('mousedown', this.handleClickOutSide);
     }
     //
@@ -95,7 +98,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getMessagePatientDoctor: (patientId, doctorId) => dispatch(actions.getMessagePatientDoctor(patientId, doctorId)),
+        getMessagePatientDoctor: (senderId, receiverId) => dispatch(actions.getMessagePatientDoctor(senderId, receiverId)),
     };
 };
 

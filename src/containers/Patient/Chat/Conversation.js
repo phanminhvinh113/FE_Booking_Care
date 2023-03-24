@@ -23,17 +23,20 @@ class Conversation extends Component {
     }
     //
     componentDidMount() {
-        this.messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        //
         this.props.socket.on('get-message', (message) => {
-            console.log(message);
+            if (message && message.senderId === this.props.inforDoctor?.id) {
+                this.setState({
+                    arrMess: [...this.state.arrMess, message],
+                    textMessage: '',
+                });
+            }
         });
+        //
         if (this.props.Conversation) {
-            this.setState(
-                {
-                    arrMess: this.props.Conversation,
-                },
-                () => console.log(this.state.arrMess),
-            );
+            this.setState({
+                arrMess: this.props.Conversation.sort((a, b) => a.time - b.time),
+            });
         }
     }
     //
@@ -44,10 +47,10 @@ class Conversation extends Component {
 
         if (prevProps.Conversation !== this.props.Conversation) {
             this.setState({
-                arrMess: this.props.Conversation,
-            }),
-                () => console.log(this.state.arrMess);
+                arrMess: this.props.Conversation.sort((a, b) => a.time - b.time),
+            });
         }
+        this.messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
     //INPUT
     handleOnChangeInput = (e) => {
@@ -122,9 +125,7 @@ class Conversation extends Component {
                                         }
                                     />
                                     <div className="text-and-time">
-                                        <p div className="text">
-                                            {item.text}
-                                        </p>
+                                        <p className="text">{item.text}</p>
                                         <div className="time">{format(item.time)}</div>
                                     </div>
                                 </div>
@@ -136,7 +137,7 @@ class Conversation extends Component {
                     <div className="chat-input-wrapper">
                         <div
                             ref={this.textInput}
-                            textContent={this.state.textMessage}
+                            //textContent={this.state.textMessage}
                             className="chat-input"
                             contentEditable={true}
                             data-placeholder="Typing..."

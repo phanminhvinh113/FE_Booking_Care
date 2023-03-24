@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import _ from 'lodash';
+import * as actions from '../../../store/actions';
 import styled, { css } from 'styled-components';
 import { format } from 'timeago.js';
 import imgGuest from '../../../assets/images/Chat/guest.png';
@@ -22,23 +23,50 @@ class ConversationMessage extends Component {
         this.Message = React.createRef();
     }
     //
-    componentDidMount() {
-        this.Message.current?.scrollIntoView({ behavior: 'smooth' });
-        this.props.socket.on('get-message', (message) => {
-            console.log(message);
+    async componentDidMount() {
+        //
+        this.props.socket.on('get-message', async (message) => {
+            if (message && message.senderId === this.props.patientInfo?.User.id && message.receiverId === this.props.doctorInfo?.id) {
+                this.setState({
+                    arrMessage: [...this.state.arrMessage, message],
+                    text: '',
+                });
+            }
         });
+        //
+        this.Message.current?.scrollIntoView({ behavior: 'smooth' });
+
+        //
+        if (this.props.patientInfo && this.props.doctorInfo) {
+            await this.getMessageFromServer(this.props.doctorInfo?.id, this.props.patientInfo?.User.id);
+        }
     }
     //
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    async componentDidUpdate(prevProps, prevState, snapshot) {
+        //
         if (prevState.arrMessage !== this.state.arrMessage) {
             this.Message.current?.scrollIntoView({ behavior: 'smooth' });
         }
-        if (this.props.socket) {
-            this.props.socket.on('get-message', (message) => {
-                console.log(message);
+        //
+        if (prevProps.patientInfo !== this.props.patientInfo) {
+            await this.getMessageFromServer(this.props.doctorInfo?.id, this.props.patientInfo?.User.id);
+        }
+        //
+        // if (prevState.text !== this.state.text) {
+        //     this.pushPatientOnTopList(this.props.listConversation, this.props.patientInfo?.senderId);
+        // }
+    }
+
+    //GET MESSAGE FROM SEVER
+    getMessageFromServer = async (senderId, receiverId) => {
+        //
+        await this.props.getMessagePatientDoctor(senderId, receiverId);
+        if (this.props.Conversation) {
+            this.setState({
+                arrMessage: this.props.Conversation.sort((a, b) => a.time - b.time),
             });
         }
-    }
+    };
     //
     handleOnChangeInput = (e) => {
         if (e.target.textContent) {
@@ -56,29 +84,36 @@ class ConversationMessage extends Component {
     };
     //
     sendMessageToServer = (senderId, receiverId, text) => {
-        this.props.socket.emit('send-message', {
-            text,
-            senderId,
-            receiverId,
-            time: new Date().getTime(),
-        });
+        if (senderId && receiverId && text) {
+            this.props.socket.emit('send-message', {
+                text,
+                senderId,
+                receiverId,
+                time: new Date().getTime(),
+            });
+        }
     };
     //
     sendMessage = () => {
         if (this.state.text.trim()) {
-            //this.sendMessageToServer(this.state?.text.trim(), _.get(this.props.doctorInfo, 'id', 'null'))
+            this.sendMessageToServer(
+                _.get(this.props.doctorInfo, 'id', 'null'),
+                _.get(this.props.patientInfo?.User, 'id', 'null'),
+                this.state?.text.trim(),
+            );
             this.setState({
                 arrMessage: [
                     ...this.state.arrMessage,
                     {
-                        id: _.get(this.props.doctorInfo, 'id', 'null'),
+                        senderId: _.get(this.props.doctorInfo, 'id', 'null'),
                         text: this.state?.text.trim() || ' ',
                         time: new Date(),
-                        image: _.get(this.props.doctorInfo, 'image', imgBookingCare),
                     },
                 ],
                 text: '',
             });
+            this.pushPatientOnTopList(this.props.listConversation, this.props.patientInfo?.senderId);
+            this.props.sortListConversation(this.props.listConversation);
         }
         if (!this.state.text.trim()) {
             this.setState({
@@ -88,21 +123,47 @@ class ConversationMessage extends Component {
         this.InputRef.current?.focus();
         this.InputRef.current.textContent = '';
     };
-
+    // PUSH USER CHATTIN ON TOP
+    pushPatientOnTopList = async (listConversation, targetPatientId) => {
+        if (!listConversation.length || listConversation[0].senderId === targetPatientId) return;
+        //
+        listConversation.forEach((conversation, index) => {
+            if (conversation.senderId === targetPatientId) {
+                listConversation.unshift(listConversation.splice(index, 1)[0]);
+            }
+        });
+        await this.props.sortListConversation(listConversation);
+        return listConversation;
+    };
     render() {
         return (
             <Wrapper>
                 <Header>
-                    <img src={imgGuest} />
-                    <h2>GUEST</h2>
+                    {this.props.patientInfo && (
+                        <>
+                            <img src={_.get(this.props.patientInfo?.User, 'image', `${imgGuest}`) || imgGuest} />
+                            <h2>
+                                {_.get(this.props.patientInfo?.User, 'firstName', '') +
+                                    ' ' +
+                                    _.get(this.props.patientInfo?.User, 'lastName', '')}
+                            </h2>
+                        </>
+                    )}
+                    {!this.props.patientInfo && <h2>CHỌN BỆNH NHÂN</h2>}
                 </Header>
                 <MainChat withScroll={'8px'}>
                     {this.state.arrMessage &&
                         this.state.arrMessage.map((item, index) => (
-                            <MessItem ref={this.Message} key={index} type={item.id === this.props.doctorInfo.id ? true : false}>
-                                <img src={item.image ? item.image : imgBookingCare} />
+                            <MessItem ref={this.Message} key={index} type={item.senderId === this.props.doctorInfo.id ? true : false}>
+                                <img
+                                    src={
+                                        item.senderId === this.props.doctorInfo?.id
+                                            ? _.get(this.props.doctorInfo, 'image', `${imgBookingCare}`) || imgBookingCare
+                                            : _.get(this.props.patientInfo.User, 'image', `${imgGuest}`) || imgGuest
+                                    }
+                                />
                                 <WrapperTextTime>
-                                    <Text type={item.id === this.props.doctorInfo.id ? true : false}>{item.text}</Text>
+                                    <Text type={item.senderId === this.props.doctorInfo?.id ? true : false}>{item.text}</Text>
                                     <Time>{format(item.time) !== 'just now' && format(item.time)}</Time>
                                 </WrapperTextTime>
                             </MessItem>
@@ -113,7 +174,7 @@ class ConversationMessage extends Component {
                         ref={this.InputRef}
                         withScroll={'5px'}
                         textContent={this.state.text}
-                        contentEditable={true}
+                        contentEditable={this.props.patientInfo ? true : false}
                         data-placeholder="Typing..."
                         spellCheck={true}
                         data-lexical-editor={true}
@@ -133,11 +194,17 @@ ConversationMessage.propTypes = {};
 const mapStateToProps = (state) => {
     return {
         doctorInfo: state.user.userInfo,
+        Conversation: state.user.Conversation,
+        patientInfo: state.user.patientInfo,
+        listConversation: state.user.listConversation,
     };
 };
 //
 const mapDispatchToProps = (dispatch) => {
-    return {};
+    return {
+        getMessagePatientDoctor: (senderId, receiverId) => dispatch(actions.getMessagePatientDoctor(senderId, receiverId)),
+        sortListConversation: (newListConversation) => dispatch(actions.sortListConversation(newListConversation)),
+    };
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConversationMessage));

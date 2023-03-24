@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { getMessagePatientDoctorService, handleLogOutUserService } from '../../services/userService';
+import { getAllConversationDoctorService, getMessagePatientDoctorService, handleLogOutUserService } from '../../services/userService';
 import actionTypes from './actionTypes';
 
 export const addUserSuccess = () => ({
@@ -32,10 +32,28 @@ export const processLogout = (user) => async (dispatch, getState) => {
         });
     }
 };
-
-export const getMessagePatientDoctor = (patientId, doctorId) => async (dispatch, getState) => {
+export const getListConversationPatient = (doctorId) => async (dispatch, getState) => {
     try {
-        const { data: res } = await getMessagePatientDoctorService(patientId, doctorId);
+        const { data: res } = await getAllConversationDoctorService(doctorId);
+        if (res && res.errCode === 0) {
+            dispatch({
+                type: actionTypes.FETCH_ALL_CONVERSATION_PATIENT_SUCCESS,
+                data: res.data,
+            });
+        } else {
+            dispatch({
+                type: actionTypes.FETCH_ALL_CONVERSATION_PATIENT_FAILED,
+            });
+        }
+    } catch (error) {
+        dispatch({
+            type: actionTypes.FETCH_ALL_CONVERSATION_PATIENT_FAILED,
+        });
+    }
+};
+export const getMessagePatientDoctor = (senderId, receiverId) => async (dispatch, getState) => {
+    try {
+        const { data: res } = await getMessagePatientDoctorService(senderId, receiverId);
         if (res && res.errCode === 0)
             dispatch({
                 type: actionTypes.FETCH_MESSAGE_PATIENT_DOCTOR_SUCCESS,
@@ -55,4 +73,9 @@ export const getMessagePatientDoctor = (patientId, doctorId) => async (dispatch,
 export const selectConversationPatient = (patientInfo) => ({
     type: actionTypes.SELECT_CONVERSATION_PATIENT,
     patientInfo,
+});
+
+export const sortListConversation = (NewListConversation) => ({
+    type: actionTypes.SORT_LIST_CONVERSATION,
+    payload: NewListConversation,
 });

@@ -6,7 +6,6 @@ import * as actions from '../../../store/actions';
 import _ from 'lodash';
 import GuestAvatar from '../../../assets/images/Chat/guest.png';
 import CustomScrollbar from '../../../components/CustomScrollbars';
-import { getAllConversationDoctorService } from '../../../services/userService';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -14,35 +13,49 @@ class ChatGroup extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            listConversation: [],
+            listConversation: this.props.listConversation || [],
+            lisUserActive: [],
+            countMessageWait: 0,
+            activeUser: _.get(this.props.patientInfo, 'User.id', 'null'),
         };
     }
 
     async componentDidMount() {
         if (this.props.doctorInfo?.id) {
-            const { data: res } = await getAllConversationDoctorService(this.props.doctorInfo.id);
-            if (res && res.errCode === 0) {
-                this.setState(
-                    {
-                        listConversation: res.data,
-                    },
-                    () => console.log(this.state.listConversation),
-                );
-            } else {
-                toast.error('Falied to Load List Question');
-            }
+            await this.props.getListConversationPatient(this.props.doctorInfo?.id);
         }
+        //
+        this.props.socket.on('get-user-active', (users) => {
+            this.setState({
+                lisUserActive: users,
+            });
+        });
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {}
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.patientInfo !== this.props.patientInfo) {
+            this.setState({
+                activeUser: _.get(this.props.patientInfo, 'User.id', 'null'),
+            });
+        }
+        if (prevProps.doctorInfo !== this.props.doctorInfo || prevProps.listConversation !== this.props.listConversation) {
+            this.setState({
+                listConversation: this.props.listConversation,
+            });
+        }
+        if (prevProps.listConversation !== this.props.listConversation) {
+            console.log(this.props.listConversation);
+            this.setState({
+                listConversation: this.props.listConversation,
+            });
+        }
+    }
     //
     handleSelectConversationPatient = async (patientInfo) => {
-        console.log(patientInfo);
         await this.props.selectConversation(patientInfo);
     };
     //
     render() {
-        console.log(this.state.listConversation);
         return (
             <Wrapper>
                 <CustomScrollbar style={{ width: '100%', height: '100%' }}>
@@ -50,7 +63,11 @@ class ChatGroup extends Component {
                         {this.state.listConversation &&
                             this.state.listConversation.map((item, index) => {
                                 return (
-                                    <ItemConversaiton key={index} onClick={() => this.handleSelectConversationPatient(item)}>
+                                    <ItemConversaiton
+                                        active={this.state.activeUser === item.senderId ? true : false}
+                                        key={index}
+                                        onClick={async () => this.handleSelectConversationPatient(item)}
+                                    >
                                         <Image background={_.get(item.User, 'image', 'null')}></Image>
                                         <Name>{_.get(item.User, 'firstName', '')}</Name>
                                     </ItemConversaiton>
@@ -68,12 +85,15 @@ ChatGroup.propTypes = {};
 const mapStateToProps = (state) => {
     return {
         doctorInfo: state.user.userInfo,
+        patientInfo: state.user.patientInfo,
+        listConversation: state.user.listConversation,
     };
 };
 //
 const mapDispatchToProps = (dispatch) => {
     return {
         selectConversation: (patientInfo) => dispatch(actions.selectConversationPatient(patientInfo)),
+        getListConversationPatient: (doctorId) => dispatch(actions.getListConversationPatient(doctorId)),
     };
 };
 
@@ -83,12 +103,6 @@ const Wrapper = styled.div`
     height: 100vh;
     width: 200px;
     background-color: #ccc;
-    h1 {
-        height: 300px;
-    }
-    h2 {
-        height: 5000px;
-    }
 `;
 const ListConversation = styled.div``;
 const ItemConversaiton = styled.div`
@@ -96,6 +110,7 @@ const ItemConversaiton = styled.div`
     align-items: flex-end;
     padding: 8px 5px;
     cursor: pointer;
+    background-color: ${(props) => (props.active ? '#e5e5e5' : 'transparent')};
     &:hover {
         background-color: #e5e5e5;
         border-radius: 5px;
@@ -103,8 +118,8 @@ const ItemConversaiton = styled.div`
     margin-top: 2px;
 `;
 const Image = styled.div`
-    height: 45px;
-    width: 45px;
+    height: 40px;
+    width: 40px;
     border-radius: 50%;
     background: url(${(props) => (props.background ? props.background : GuestAvatar)}) no-repeat center;
     background-size: cover;

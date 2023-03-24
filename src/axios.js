@@ -1,5 +1,6 @@
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
+import * as action from './store/actions';
 const instance = axios.create({
     baseURL: process.env.REACT_APP_BACKEND_URL,
     headers: {
@@ -36,7 +37,9 @@ instance.interceptors.response.use(
         //
         const originalConfig = error.config;
         //
-        if (error.response && error.response.status === 401 && !originalConfig._retry) {
+
+        //
+        if (error.response && error.response.status === 401 && !originalConfig._retry && error.response?.data.errCode === 1) {
             //
             originalConfig._retry = true;
             // REFRESH TOKEN
@@ -49,9 +52,10 @@ instance.interceptors.response.use(
                 instance.defaults.headers.common['Authorization'] = `Bearer ${data.newAccessToken}`;
                 // Retry the original request
                 return instance(originalConfig);
-            } else {
-                return Promise.reject(error);
             }
+            console.log(data);
+            if (data.errCode === 2 && data.message === 'invalid signature') action.processLogout();
+            else action.processLogout();
         }
         return Promise.reject(error);
     },

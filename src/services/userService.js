@@ -16,7 +16,7 @@ export const handleLogOutUserService = (data) => {
 };
 
 export const getAllUsers = (inputId) => {
-    return instance.get(`/api/get-all-users?id=${inputId}`);
+    return axios.get(`/api/get-all-users?id=${inputId}`);
 };
 
 export const createNewUserService = (data) => {
@@ -59,11 +59,11 @@ export const evaluateMedicalDoctor = (data) => {
     return axios.post('/api/evaluate-doctor', data);
 };
 //
-export const getMessagePatientDoctorService = (patientId, doctorId) => {
+export const getMessagePatientDoctorService = (senderId, receiverId) => {
     return axios.get('/api/get_all_message', {
         params: {
-            senderId: patientId,
-            receiverId: doctorId,
+            senderId,
+            receiverId,
         },
     });
 };
