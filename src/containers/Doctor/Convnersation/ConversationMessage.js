@@ -51,16 +51,13 @@ class ConversationMessage extends Component {
         if (prevProps.patientInfo !== this.props.patientInfo) {
             await this.getMessageFromServer(this.props.doctorInfo?.id, this.props.patientInfo?.User.id);
         }
-        //
-        // if (prevState.text !== this.state.text) {
-        //     this.pushPatientOnTopList(this.props.listConversation, this.props.patientInfo?.senderId);
-        // }
     }
 
     //GET MESSAGE FROM SEVER
     getMessageFromServer = async (senderId, receiverId) => {
         //
-        await this.props.getMessagePatientDoctor(senderId, receiverId);
+        await this.props.getMessagePatientDoctor({ senderId, receiverId });
+        //
         if (this.props.Conversation) {
             this.setState({
                 arrMessage: this.props.Conversation.sort((a, b) => a.time - b.time),
@@ -94,7 +91,7 @@ class ConversationMessage extends Component {
         }
     };
     //
-    sendMessage = () => {
+    sendMessage = async () => {
         if (this.state.text.trim()) {
             this.sendMessageToServer(
                 _.get(this.props.doctorInfo, 'id', 'null'),
@@ -113,7 +110,6 @@ class ConversationMessage extends Component {
                 text: '',
             });
             this.pushPatientOnTopList(this.props.listConversation, this.props.patientInfo?.senderId);
-            this.props.sortListConversation(this.props.listConversation);
         }
         if (!this.state.text.trim()) {
             this.setState({
@@ -132,8 +128,8 @@ class ConversationMessage extends Component {
                 listConversation.unshift(listConversation.splice(index, 1)[0]);
             }
         });
-        await this.props.sortListConversation(listConversation);
-        return listConversation;
+        //
+        this.props.sortListConversation(_.get(this.props.patientInfo, 'senderId', 'null'));
     };
     render() {
         return (
@@ -287,6 +283,7 @@ const Header = styled.header`
     img {
         width: 45px;
         height: 45px;
+        border-radius: 50%;
     }
     h2 {
         margin: 0 10px;

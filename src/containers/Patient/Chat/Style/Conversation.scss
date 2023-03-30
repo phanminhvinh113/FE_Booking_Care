@@ -82,7 +82,10 @@
     .cotent-text {
         padding: 10px 8px;
         overflow-y: scroll;
-        max-height: 363px;
+        max-height: 57vh;
+        .loading {
+            margin: auto;
+        }
     }
     .conversation-message {
         margin: 15px 0;

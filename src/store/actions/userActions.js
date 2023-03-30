@@ -51,9 +51,9 @@ export const getListConversationPatient = (doctorId) => async (dispatch, getStat
         });
     }
 };
-export const getMessagePatientDoctor = (senderId, receiverId) => async (dispatch, getState) => {
+export const getMessagePatientDoctor = (payload) => async (dispatch, getState) => {
     try {
-        const { data: res } = await getMessagePatientDoctorService(senderId, receiverId);
+        const { data: res } = await getMessagePatientDoctorService(payload);
         if (res && res.errCode === 0)
             dispatch({
                 type: actionTypes.FETCH_MESSAGE_PATIENT_DOCTOR_SUCCESS,
@@ -75,7 +75,9 @@ export const selectConversationPatient = (patientInfo) => ({
     patientInfo,
 });
 
-export const sortListConversation = (NewListConversation) => ({
-    type: actionTypes.SORT_LIST_CONVERSATION,
-    payload: NewListConversation,
-});
+export const sortListConversation = (targetUser) => {
+    return {
+        type: actionTypes.SORT_LIST_CONVERSATION,
+        payload: targetUser,
+    };
+};

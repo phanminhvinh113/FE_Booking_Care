@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as actions from '../../store/actions';
+import firebase, { logginWithGoogleFirebase, logginWithFaceBookFirebase } from './firebase';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF } from '@fortawesome/free-brands-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
@@ -9,6 +10,8 @@ import { handleLogInUserService } from '../../services/userService';
 import { path, ROLE_USER, TITLE_BROWSWER } from '../../utils/constant';
 import { Link } from 'react-router-dom';
 import './Login.scss';
+import { toast } from 'react-toastify';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 
 class Login extends Component {
     ///////////////////\\INITIAL VALUES\\///////////////////////////////////
@@ -28,10 +31,7 @@ class Login extends Component {
         document.title = TITLE_BROWSWER.Login;
     }
     componentDidUpdate(prevProps, prevState, snapshot) {}
-    //
-
     ///////////////////\\HANDLE VALUE INPUT\\////////////////////////////
-
     handleOnchangeUserName = (e) => {
         if (e.keyCode === 13) {
             this.handleLogIn();
@@ -112,6 +112,43 @@ class Login extends Component {
             isHidden: !this.state.isHidden,
         });
     };
+    //
+    handleLogInGoogle = async () => {
+        try {
+            const user = await logginWithGoogleFirebase();
+            if (user) {
+                console.log(user);
+                await this.props.userLogInSucces(user);
+                this.props.history.push(path.HOMEPAGE);
+            } else {
+                console.log('1');
+                toast.error('LOGGIN FALIED');
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('LOGGIN FALIED');
+        }
+    };
+    handleLogInFaceBook = async () => {
+        try {
+            const result = await logginWithFaceBookFirebase();
+            console.log(result);
+        } catch (error) {
+            console.log(error);
+            toast.error('LOGGIN FALIED');
+        }
+    };
+    responseFacebook = (response) => {
+        console.log(response);
+        this.props.userLogInSucces({
+            id: _.get(response, 'id', ''),
+            firstName: _.get(response, 'name', ''),
+            email: _.get(response, 'email', ''),
+            imgae: _.get(response, 'picture.data.url', ''),
+            roleId: 'R3',
+        });
+        this.props.history.push(path.HOMEPAGE);
+    };
     //////////////////////////\\RENDER DISPLAY\\/////////////////////////////
     render() {
         return (
@@ -160,13 +197,29 @@ class Login extends Component {
                             </button>
                         </footer>
                         <div className="btnLogIn">
-                            <div className="fb_icon">
-                                <FontAwesomeIcon icon={faFacebookF} />
-                            </div>
-                            <div className="gg_icon">
+                            <div onClick={this.handleLogInGoogle} className="gg_icon">
                                 <img
                                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png"
                                     alt=""
+                                />
+                                <span>Đăng nhập với Google</span>
+                            </div>
+                            {/* <div onClick={this.handleLogInFaceBook} className="fb_icon">
+                                <FontAwesomeIcon icon={faFacebookF} />
+                                <span>Đăng nhập với Facebook</span>
+                            </div> */}
+                            <div className="fb-wrapper">
+                                <FacebookLogin
+                                    cssClass="fb-loggin"
+                                    appId="1287641762189170"
+                                    autoLoad={false}
+                                    fields="name,email,picture"
+                                    render={(renderProps) => (
+                                        <div onClick={renderProps.onClick} className="fb_icon">
+                                            <FontAwesomeIcon icon={faFacebookF} />
+                                            <span>Đăng nhập với Facebook</span>
+                                        </div>
+                                    )}
                                 />
                             </div>
                         </div>

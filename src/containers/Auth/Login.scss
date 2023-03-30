@@ -17,8 +17,8 @@ body {
 .container_login_background {
     height: 100vh;
     box-sizing: border-box;
-    background-color: rgb(34, 193, 195);
-    background: linear-gradient(135deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
+    background: url('../../assets/images/bookingcare-cover-4.jpg') no-repeat center;
+    background-size: cover;
     font-family: 'work sans';
     display: flex;
     justify-content: center;
@@ -80,28 +80,57 @@ body {
         }
     }
     .btnLogIn {
-        margin-top: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
+        margin-top: 40px;
         .fb_icon {
-            margin: 0 5px;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            background-color: #1977f3;
-            color: #fff;
+            position: relative;
+            height: 44px;
+            background-color: #fff;
+            border: 2px solid #dce0e3;
+            border-radius: 44px;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            margin: 20px 10px;
             cursor: pointer;
+            span {
+                color: #35414c;
+                font-size: 1.6rem;
+            }
+            svg {
+                position: absolute;
+                left: 17px;
+                color: #1977f3;
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+            }
+            &:hover {
+                background-color: #f8f8f8;
+            }
         }
         .gg_icon {
-            margin: 0 5px;
+            position: relative;
+            height: 44px;
+            background-color: #fff;
+            border: 2px solid #dce0e3;
+            border-radius: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
             cursor: pointer;
+            span {
+                color: #35414c;
+                font-size: 1.6rem;
+            }
             img {
+                position: absolute;
+                left: 18px;
                 width: 25px;
+                height: 25px;
+            }
+            &:hover {
+                background-color: #f8f8f8;
             }
         }
     }
@@ -123,9 +152,10 @@ body {
         float: right;
         margin: 20px 0;
         a {
-            font-size: 1.6rem;
-            color: #45c3d2;
+            font-size: 1.8rem;
+            color: #1d93a1;
             font-weight: 600;
+            text-decoration: none;
         }
     }
 }

@@ -3,9 +3,10 @@ import actionTypes from '../actions/actionTypes';
 const initialState = {
     isLoggedIn: false,
     userInfo: null,
-    Conversation: null,
+    Conversation: [],
     patientInfo: null,
     listConversation: [],
+    userTop: null,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -36,7 +37,7 @@ const userReducer = (state = initialState, action) => {
         case actionTypes.FETCH_MESSAGE_PATIENT_DOCTOR_SUCCESS: {
             return {
                 ...state,
-                Conversation: action.data,
+                Conversation: action.data?.sort((a, b) => a.time - b.time),
             };
         }
         case actionTypes.SELECT_CONVERSATION_PATIENT: {
@@ -59,7 +60,7 @@ const userReducer = (state = initialState, action) => {
         case actionTypes.SORT_LIST_CONVERSATION: {
             return {
                 ...state,
-                listConversation: action.payload,
+                userTop: action.payload,
             };
         }
         default:

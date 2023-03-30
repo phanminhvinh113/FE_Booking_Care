@@ -23,6 +23,9 @@ class ChatGroup extends Component {
     async componentDidMount() {
         if (this.props.doctorInfo?.id) {
             await this.props.getListConversationPatient(this.props.doctorInfo?.id);
+            this.setState({
+                listConversation: this.props.listConversation,
+            });
         }
         //
         this.props.socket.on('get-user-active', (users) => {
@@ -38,13 +41,12 @@ class ChatGroup extends Component {
                 activeUser: _.get(this.props.patientInfo, 'User.id', 'null'),
             });
         }
-        if (prevProps.doctorInfo !== this.props.doctorInfo || prevProps.listConversation !== this.props.listConversation) {
+        if (prevProps.doctorInfo !== this.props.doctorInfo) {
             this.setState({
                 listConversation: this.props.listConversation,
             });
         }
-        if (prevProps.listConversation !== this.props.listConversation) {
-            console.log(this.props.listConversation);
+        if (this.props.userTop && prevProps.userTop !== this.props.userTop) {
             this.setState({
                 listConversation: this.props.listConversation,
             });
@@ -87,6 +89,7 @@ const mapStateToProps = (state) => {
         doctorInfo: state.user.userInfo,
         patientInfo: state.user.patientInfo,
         listConversation: state.user.listConversation,
+        userTop: state.user.userTop,
     };
 };
 //

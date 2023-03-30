@@ -59,11 +59,13 @@ export const evaluateMedicalDoctor = (data) => {
     return axios.post('/api/evaluate-doctor', data);
 };
 //
-export const getMessagePatientDoctorService = (senderId, receiverId) => {
+export const getMessagePatientDoctorService = ({ senderId, receiverId, offset, limit }) => {
     return axios.get('/api/get_all_message', {
         params: {
             senderId,
             receiverId,
+            limit,
+            offset,
         },
     });
 };

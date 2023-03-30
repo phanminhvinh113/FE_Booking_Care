@@ -5,21 +5,30 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import styled, { keyframes } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+import { signUpWithPhoneNumber } from './firebase';
 import Poppins_Bold from '../../assets/font/Poppins-Bold.ttf';
 import Poppins_Medium from '../../assets/font/Poppins-Medium.ttf';
 import Poppins_Regular from '../../assets/font/Poppins-Regular.ttf';
 import registerBackground from '../../assets/images/register_background.webp';
-import { TITLE_BROWSWER, VALIDATE, VALIDATE_CONTENT } from '../../utils';
+import { path, TITLE_BROWSWER, VALIDATE, VALIDATE_CONTENT } from '../../utils';
+import toast from 'react-hot-toast';
+import { Link } from 'react-router-dom';
+
+//
 class Register extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            option: 'Phone',
             hiddenPass: true,
             hiddenComfirmPass: true,
             firstName: '',
             lastName: '',
             email: '',
+            phone: '',
             password: '',
             confirmPassword: '',
             error: {},
@@ -28,13 +37,25 @@ class Register extends Component {
     }
     componentDidMount() {
         document.title = TITLE_BROWSWER.Register;
-        console.log(this.state.error);
     }
+    //
+    handleChangeModeRegister = () => {
+        this.setState((prevState) => ({
+            option: prevState.option === 'Email' ? 'Phone' : 'Email',
+            hiddenPass: true,
+            hiddenComfirmPass: true,
+            firstName: '',
+            lastName: '',
+            email: '',
+            phone: '',
+            password: '',
+            confirmPassword: '',
+            error: {},
+            openErrorMess: false,
+        }));
+    };
     // HANDLE CHANGE INPUT
     handleChangeInput = (e) => {
-        // if (this.state.error.hasOwnProperty(e.target.name)) {
-        //     delete this.state.error[e.target.name];
-        // }
         if (!e.target.value.startsWith(' ')) {
             this.setState({
                 [e.target.name]: e.target.value,
@@ -42,32 +63,24 @@ class Register extends Component {
             });
         }
     };
-
     // VALIDATE WHEN BLUR INPUT
     validateOnBlur = (e, options) => {
-        //
         let error_mess = '';
-        //
         for (let option of Object.keys(options)) {
-            //
             let check = this.validationOptions(this.state[e.target.name], options[option])[option];
-            //
             if (check() === VALIDATE_CONTENT.Is_Required) {
                 return this.setState({
                     error: { ...this.state.error, [e.target.name]: check() },
                 });
             }
-            //
             if (check() !== true && check()) {
                 error_mess = error_mess.concat(' ', check());
             }
         }
-        //
         this.setState({
             error: { ...this.state.error, [e.target.name]: error_mess ? error_mess : true },
         });
     };
-
     // VALIDATION INPUT
     validationOptions = (value, require) => ({
         isRequired: () => (value ? true : VALIDATE_CONTENT.Is_Required),
@@ -103,12 +116,38 @@ class Register extends Component {
         return true;
     };
     //
+    handleOnChangePhone = (value) => {
+        this.setState({
+            phone: value,
+        });
+    };
+    //
+    handleVerifyPhoneNumer = async () => {
+        if (this.state.phone) {
+            const result = await signUpWithPhoneNumber(this.state.phone);
+            console.log(result);
+            result?.verificationId ? alert('SEND OTP SUCE') : alert('FAILED');
+        } else {
+            toast.error('Send OTP Failed!');
+        }
+    };
+    //
     //RENDER
     render() {
         return (
             <Container>
+                <div id="recaptcha-container"></div>
                 <Wrapper>
                     <Title>REGISRER</Title>
+                    <Option>
+                        <OptionButton onClick={this.handleChangeModeRegister} $mode={this.state.option === 'Email' ? 'active' : 'visible'}>
+                            Đăng kí với Email
+                        </OptionButton>
+                        <span>/</span>
+                        <OptionButton onClick={this.handleChangeModeRegister} $mode={this.state.option === 'Phone' ? 'active' : 'visible'}>
+                            Đăng kí với SĐT
+                        </OptionButton>
+                    </Option>
                     <WrapperFill>
                         <Lable>First Name</Lable>
                         {this.state.error.hasOwnProperty(VALIDATE.firstName) && this.state?.error[VALIDATE.firstName] !== true && (
@@ -137,6 +176,7 @@ class Register extends Component {
                             )}
                         </IconInput>
                     </WrapperFill>
+
                     <WrapperFill>
                         <Lable>Last Name</Lable>
                         {this.state.error.hasOwnProperty(VALIDATE.lastName) && this.state?.error[VALIDATE.lastName] !== true && (
@@ -166,29 +206,46 @@ class Register extends Component {
                         </IconInput>
                     </WrapperFill>
                     <WrapperFill>
-                        <Lable>Email</Lable>
-                        {this.state.error.hasOwnProperty(VALIDATE.email) && this.state?.error[VALIDATE.email] !== true && (
-                            <ErrMessage>{this.state?.error[VALIDATE.email]}</ErrMessage>
+                        <Lable>{this.state.option}</Lable>
+                        {this.state.option === 'Email' && (
+                            <>
+                                {this.state.error.hasOwnProperty(VALIDATE.email) && this.state?.error[VALIDATE.email] !== true && (
+                                    <ErrMessage>{this.state?.error[VALIDATE.email]}</ErrMessage>
+                                )}
+                                <IconInput>
+                                    <FontAwesomeIcon icon={faEnvelope} />
+                                    <InputFill
+                                        value={this.state.email}
+                                        type="email"
+                                        placeholder="John@email.com"
+                                        name="email"
+                                        onChange={(e) => this.handleChangeInput(e)}
+                                        onBlur={(e) =>
+                                            this.validateOnBlur(e, {
+                                                isRequired: true,
+                                                isEmail: true,
+                                            })
+                                        }
+                                    />
+                                    {this.state.error.hasOwnProperty(VALIDATE.email) && this.state?.error[VALIDATE.email] !== true && (
+                                        <FontAwesomeIcon className="error_icon" onClick={this.handleOpenErrMess} icon={faCircleExclamation} />
+                                    )}
+                                </IconInput>
+                            </>
                         )}
-                        <IconInput>
-                            <FontAwesomeIcon icon={faEnvelope} />
-                            <InputFill
-                                value={this.state.email}
-                                type="email"
-                                placeholder="John@email.com"
-                                name="email"
-                                onChange={(e) => this.handleChangeInput(e)}
-                                onBlur={(e) =>
-                                    this.validateOnBlur(e, {
-                                        isRequired: true,
-                                        isEmail: true,
-                                    })
-                                }
-                            />
-                            {this.state.error.hasOwnProperty(VALIDATE.email) && this.state?.error[VALIDATE.email] !== true && (
-                                <FontAwesomeIcon className="error_icon" onClick={this.handleOpenErrMess} icon={faCircleExclamation} />
-                            )}
-                        </IconInput>
+                        {this.state.option === 'Phone' && (
+                            <>
+                                <PhoneInputWrapper>
+                                    <PhoneInput
+                                        country="vn"
+                                        placeholder="Enter phone number"
+                                        value={this.state.phone}
+                                        onChange={(value) => this.handleOnChangePhone(value)}
+                                    />
+                                    <VerifyPhoneNumber onClick={this.handleVerifyPhoneNumer}>Send Code</VerifyPhoneNumber>
+                                </PhoneInputWrapper>
+                            </>
+                        )}
                     </WrapperFill>
                     <WrapperFill>
                         <Lable>Password</Lable>
@@ -270,27 +327,28 @@ class Register extends Component {
                     <SubmitBtn disabled={this.permissSubmit() ? false : true} onClick={this.permissSubmit}>
                         ĐĂNG KÍ
                     </SubmitBtn>
+                    <SignInBtn>
+                        <Link to={path.LOGIN}>Đăng Nhập</Link>
+                    </SignInBtn>
                 </Wrapper>
             </Container>
         );
     }
 }
-////
-
+//
 const mapStateToProps = (state) => {
     return {
         language: state.app.language,
     };
 };
-
 ///////////////////////DISPATCH////////////////////////////
 const mapDispatchToProps = (dispatch) => {
     return {
         navigate: (path) => dispatch(push(path)),
     };
 };
+//
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Register));
-
 // kEY FRAME
 const keyFramesWidth = keyframes`
     0%{
@@ -391,6 +449,43 @@ const Title = styled.header`
     line-height: 1.2;
     text-align: center;
 `;
+const Option = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    span {
+        margin: 0 5px;
+    }
+`;
+const OptionButton = styled.button`
+    font-weight: 500;
+    font-size: 14px;
+    color: #838181;
+    line-height: 1.5;
+    border: none;
+    padding: 2px 6px;
+    background-color: transparent;
+    ${(props) => {
+        switch (props.$mode) {
+            case 'active':
+                return css`
+                    border-bottom: 1px solid #838181;
+                `;
+            case 'visible':
+                return css`
+                    color: #ccc;
+                `;
+            default:
+                return css`
+                    color: #818383;
+                    border: 1px solid #000;
+                `;
+        }
+    }}
+    &:hover {
+        color: '#000';
+    }
+`;
 const Lable = styled.span`
     @font-face {
         font-family: 'Poppins-Regular';
@@ -462,5 +557,46 @@ const SubmitBtn = styled.button`
         :hover {
             opacity: 0.8;
         }
+    }
+`;
+const PhoneInputWrapper = styled.div`
+    margin: 10px 0;
+    position: relative;
+    .react-tel-input .form-control {
+        width: 100%;
+        height: 40px;
+    }
+`;
+const VerifyPhoneNumber = styled.button`
+    @font-face {
+        font-family: 'Poppins-Medium';
+        src: url(${Poppins_Medium}) format('ttf');
+        font-style: normal;
+    }
+    position: absolute;
+    right: 2px;
+    top: 4px;
+    border: none;
+    padding: 6px;
+    border-radius: 8px;
+    background-color: #ccc;
+    color: #757575;
+    font-weight: 500;
+`;
+const SignInBtn = styled.button`
+    @font-face {
+        font-family: 'Poppins-Medium';
+        src: url(${Poppins_Medium}) format('ttf');
+        font-style: normal;
+    }
+    border: none;
+    background-color: transparent;
+    margin-top: 40px;
+    font-size: 1.8rem;
+    a {
+        font-weight: 500;
+        color: #1d9393;
+        outline: none;
+        text-decoration: none;
     }
 `;
