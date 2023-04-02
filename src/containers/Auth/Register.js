@@ -22,7 +22,7 @@ class Register extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            option: 'Phone',
+            option: 'Email',
             hiddenPass: true,
             hiddenComfirmPass: true,
             firstName: '',
@@ -150,9 +150,7 @@ class Register extends Component {
                     </Option>
                     <WrapperFill>
                         <Lable>First Name</Lable>
-                        {this.state.error.hasOwnProperty(VALIDATE.firstName) && this.state?.error[VALIDATE.firstName] !== true && (
-                            <ErrMessage>{this.state?.error[VALIDATE.firstName]}</ErrMessage>
-                        )}
+
                         <IconInput>
                             <FontAwesomeIcon icon={faUser} />
                             <InputFill
@@ -174,14 +172,15 @@ class Register extends Component {
                             {this.state.error.hasOwnProperty(VALIDATE.firstName) && this.state.error[VALIDATE.firstName] !== true && (
                                 <FontAwesomeIcon className="error_icon" icon={faCircleExclamation} />
                             )}
+                            {this.state.error.hasOwnProperty(VALIDATE.firstName) && this.state?.error[VALIDATE.firstName] !== true && (
+                                <ErrMessage>{this.state?.error[VALIDATE.firstName]}</ErrMessage>
+                            )}
                         </IconInput>
                     </WrapperFill>
 
                     <WrapperFill>
                         <Lable>Last Name</Lable>
-                        {this.state.error.hasOwnProperty(VALIDATE.lastName) && this.state?.error[VALIDATE.lastName] !== true && (
-                            <ErrMessage>{this.state?.error[VALIDATE.lastName]}</ErrMessage>
-                        )}
+
                         <IconInput>
                             <FontAwesomeIcon icon={faUser} />
                             <InputFill
@@ -203,15 +202,15 @@ class Register extends Component {
                             {this.state.error.hasOwnProperty(VALIDATE.lastName) && this.state?.error[VALIDATE.lastName] !== true && (
                                 <FontAwesomeIcon className="error_icon" icon={faCircleExclamation} />
                             )}
+                            {this.state.error.hasOwnProperty(VALIDATE.lastName) && this.state?.error[VALIDATE.lastName] !== true && (
+                                <ErrMessage>{this.state?.error[VALIDATE.lastName]}</ErrMessage>
+                            )}
                         </IconInput>
                     </WrapperFill>
                     <WrapperFill>
                         <Lable>{this.state.option}</Lable>
                         {this.state.option === 'Email' && (
                             <>
-                                {this.state.error.hasOwnProperty(VALIDATE.email) && this.state?.error[VALIDATE.email] !== true && (
-                                    <ErrMessage>{this.state?.error[VALIDATE.email]}</ErrMessage>
-                                )}
                                 <IconInput>
                                     <FontAwesomeIcon icon={faEnvelope} />
                                     <InputFill
@@ -229,6 +228,9 @@ class Register extends Component {
                                     />
                                     {this.state.error.hasOwnProperty(VALIDATE.email) && this.state?.error[VALIDATE.email] !== true && (
                                         <FontAwesomeIcon className="error_icon" onClick={this.handleOpenErrMess} icon={faCircleExclamation} />
+                                    )}
+                                    {this.state.error.hasOwnProperty(VALIDATE.email) && this.state?.error[VALIDATE.email] !== true && (
+                                        <ErrMessage>{this.state?.error[VALIDATE.email]}</ErrMessage>
                                     )}
                                 </IconInput>
                             </>
@@ -249,9 +251,7 @@ class Register extends Component {
                     </WrapperFill>
                     <WrapperFill>
                         <Lable>Password</Lable>
-                        {this.state.error.hasOwnProperty(VALIDATE.password) && this.state?.error[VALIDATE.password] !== true && (
-                            <ErrMessage>{this.state?.error[VALIDATE.password]}</ErrMessage>
-                        )}
+
                         <IconInput>
                             <FontAwesomeIcon icon={faLock} />
                             <InputFill
@@ -275,6 +275,9 @@ class Register extends Component {
                                 this.state?.error[VALIDATE.password] !== true && (
                                     <FontAwesomeIcon className="error_icon" icon={faCircleExclamation} />
                                 )}
+                            {this.state.error.hasOwnProperty(VALIDATE.password) && this.state?.error[VALIDATE.password] !== true && (
+                                <ErrMessage>{this.state?.error[VALIDATE.password]}</ErrMessage>
+                            )}
                             {this.state.password.trim() && (
                                 <FontAwesomeIcon
                                     onClick={() => {
@@ -291,9 +294,7 @@ class Register extends Component {
                     </WrapperFill>
                     <WrapperFill>
                         <Lable>Confirm Password</Lable>
-                        {this.state.error.hasOwnProperty(VALIDATE.confirmPassword) && this.state?.error[VALIDATE.confirmPassword] !== true && (
-                            <ErrMessage>{this.state?.error[VALIDATE.confirmPassword]}</ErrMessage>
-                        )}
+
                         <IconInput>
                             <FontAwesomeIcon icon={faLock} />
                             <InputFill
@@ -309,6 +310,10 @@ class Register extends Component {
                                 this.state.error.hasOwnProperty(VALIDATE.confirmPassword) &&
                                 this.state?.error[VALIDATE.confirmPassword] !== true && (
                                     <FontAwesomeIcon className="error_icon" icon={faCircleExclamation} />
+                                )}
+                            {this.state.error.hasOwnProperty(VALIDATE.confirmPassword) &&
+                                this.state?.error[VALIDATE.confirmPassword] !== true && (
+                                    <ErrMessage>{this.state?.error[VALIDATE.confirmPassword]}</ErrMessage>
                                 )}
                             {this.state.confirmPassword && (
                                 <FontAwesomeIcon
@@ -372,36 +377,41 @@ const Container = styled.div`
 const Wrapper = styled.div`
     margin: auto;
     padding: 40px 55px;
-    min-width: 500px;
+    min-width: 550px;
     background: #fff;
     border-radius: 10px;
     overflow: hidden;
 `;
-
 const ErrMessage = styled.div`
-    display: inline-flex;
+    position: absolute;
+    top: 12px;
+    right: 20px;
+    display: none;
     margin-left: 4px;
     border: 1px solid #c80000;
-    padding: 5px 10px;
+    padding: 5px 5px;
     color: #c80000;
     max-width: 325px;
     font-size: 1.2rem;
 `;
+
 const IconInput = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    .error_icon {
-        color: #c80000;
-        cursor: pointer;
-        height: 15px;
-        width: 15px;
-    }
-
     svg {
         font-size: 1.6rem;
         color: #adadad;
         margin-left: 10px;
+    }
+    .error_icon {
+        z-index: 1000;
+        color: #c80000;
+        cursor: pointer;
+        font-size: 1.6rem;
+        &:hover + ${ErrMessage} {
+            display: inline-flex;
+        }
     }
 
     .hidden_pass {
@@ -460,15 +470,16 @@ const Option = styled.div`
 const OptionButton = styled.button`
     font-weight: 500;
     font-size: 14px;
-    color: #838181;
     line-height: 1.5;
     border: none;
     padding: 2px 6px;
     background-color: transparent;
+
     ${(props) => {
         switch (props.$mode) {
             case 'active':
                 return css`
+                    color: #838181;
                     border-bottom: 1px solid #838181;
                 `;
             case 'visible':
@@ -483,7 +494,7 @@ const OptionButton = styled.button`
         }
     }}
     &:hover {
-        color: '#000';
+        color: '#838383';
     }
 `;
 const Lable = styled.span`

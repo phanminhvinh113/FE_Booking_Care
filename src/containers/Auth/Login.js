@@ -33,7 +33,7 @@ class Login extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {}
     ///////////////////\\HANDLE VALUE INPUT\\////////////////////////////
     handleOnchangeUserName = (e) => {
-        if (e.keyCode === 13) {
+        if (e.keyCode === 13 && this.state.userName && this.state.passWord) {
             this.handleLogIn();
         }
         this.setState({
@@ -43,7 +43,7 @@ class Login extends Component {
     };
     // PASSWORD
     handleOnchangePassword = (e) => {
-        if (e.keyCode === 13) {
+        if (e.keyCode === 13 && this.state.userName && this.state.passWord) {
             this.handleLogIn();
         }
         this.setState({
@@ -144,7 +144,7 @@ class Login extends Component {
             id: _.get(response, 'id', ''),
             firstName: _.get(response, 'name', ''),
             email: _.get(response, 'email', ''),
-            imgae: _.get(response, 'picture.data.url', ''),
+            image: _.get(response, 'picture.data.url', ''),
             roleId: 'R3',
         });
         this.props.history.push(path.HOMEPAGE);
@@ -155,11 +155,11 @@ class Login extends Component {
             <div className="container_login_background">
                 <div className="login_form ">
                     <div className="header">
-                        <h2>Login</h2>
+                        <h2>Đăng Nhập</h2>
                     </div>
                     <div className="content">
                         <div className="Email">
-                            <label htmlFor="Email">UserName</label>
+                            <label htmlFor="Email">Tài Khoản(Email/SĐT)</label>
                             <input
                                 type={'email'}
                                 id="Email"
@@ -171,7 +171,7 @@ class Login extends Component {
                             />
                         </div>
                         <div className="Password">
-                            <label htmlFor="Password">Password</label>
+                            <label htmlFor="Password">Mật khẩu</label>
                             <input
                                 type={!this.state.isHidden ? 'password' : 'text'}
                                 id="Password"
@@ -213,6 +213,7 @@ class Login extends Component {
                                     cssClass="fb-loggin"
                                     appId="1287641762189170"
                                     autoLoad={false}
+                                    callback={this.responseFacebook}
                                     fields="name,email,picture"
                                     render={(renderProps) => (
                                         <div onClick={renderProps.onClick} className="fb_icon">
@@ -224,7 +225,7 @@ class Login extends Component {
                             </div>
                         </div>
                         <div className="register">
-                            <Link to={path.REGISTER}>Sign Up</Link>
+                            <Link to={path.REGISTER}>Đăng Ký</Link>
                         </div>
                     </div>
                 </div>

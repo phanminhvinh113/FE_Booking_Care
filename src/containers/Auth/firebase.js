@@ -13,6 +13,7 @@ import {
     signInWithPhoneNumber,
     linkWithRedirect,
     signOut,
+    sendEmailVerification,
 } from 'firebase/auth';
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -162,5 +163,6 @@ export const SignOutSocial = async () => {
         }
     });
 };
+//
 // DEFAULT
 export default app;
