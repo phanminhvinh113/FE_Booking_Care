@@ -38,6 +38,15 @@ export const deleteUserService = (userId) => {
         },
     });
 };
+// CHECK EXIST FEILD VALUE
+export const checkExistData = (field, value) => {
+    return axios.get('/api/auth/check-exist', {
+        params: {
+            field,
+            value,
+        },
+    });
+};
 //// GET ALL CODE ///
 export const getAllCode = (inputType) => {
     return axios.get('/api/allcode', {
@@ -75,4 +84,19 @@ export const getAllConversationDoctorService = (doctorId) => {
             doctorId,
         },
     });
+};
+//
+export const sendEmailOTPService = (email) => {
+    return axios.post('/api/send_otp', {
+        email,
+    });
+};
+export const verifyOtpEmailService = (email, otp) => {
+    return axios.post('/api/verify_otp', {
+        email,
+        otp,
+    });
+};
+export const registerNewUserService = (data) => {
+    return axios.post('/api/register', data);
 };

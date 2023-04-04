@@ -75,4 +75,5 @@ export const VALIDATE_CONTENT = {
     Include_Character: 'Phải nhập chữ.',
     Not_Include_Character: ' Không được nhập chữ.',
     Confirm_Password: 'Mật khẩu nhập lại không đúng.',
+    Exist_Data: 'đã tồn tại!',
 };

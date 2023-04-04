@@ -14,8 +14,13 @@ import Poppins_Medium from '../../assets/font/Poppins-Medium.ttf';
 import Poppins_Regular from '../../assets/font/Poppins-Regular.ttf';
 import registerBackground from '../../assets/images/register_background.webp';
 import { path, TITLE_BROWSWER, VALIDATE, VALIDATE_CONTENT } from '../../utils';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import { checkExistData, registerNewUserService, sendEmailOTPService, verifyOtpEmailService } from '../../services/userService';
+import { ClipLoader } from 'react-spinners';
+import OtpInput from 'react-otp-input';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 //
 class Register extends Component {
@@ -28,6 +33,11 @@ class Register extends Component {
             firstName: '',
             lastName: '',
             email: '',
+            otp: '',
+            show_modal_verify: false,
+            Verified_mail: false,
+            sending_otp: false,
+            get_otp: false,
             phone: '',
             password: '',
             confirmPassword: '',
@@ -64,7 +74,7 @@ class Register extends Component {
         }
     };
     // VALIDATE WHEN BLUR INPUT
-    validateOnBlur = (e, options) => {
+    validateOnBlur = async (e, options) => {
         let error_mess = '';
         for (let option of Object.keys(options)) {
             let check = this.validationOptions(this.state[e.target.name], options[option])[option];
@@ -77,8 +87,16 @@ class Register extends Component {
                 error_mess = error_mess.concat(' ', check());
             }
         }
+
+        if (!error_mess && options.isExistData) {
+            e.persist();
+            const { data: response } = await checkExistData(e.target.name, e.target.value);
+            if (response && response.errCode === 0 && response.isExist) error_mess = error_mess.concat(response.message);
+            else if (response?.errCode !== 0) error_mess = error_mess.concat('Xảy ra lỗi khi kiểm tra email của bạn!');
+        }
+        //
         this.setState({
-            error: { ...this.state.error, [e.target.name]: error_mess ? error_mess : true },
+            error: { ...this.state.error, [e.target?.name]: error_mess ? error_mess : true },
         });
     };
     // VALIDATION INPUT
@@ -106,14 +124,19 @@ class Register extends Component {
                 : VALIDATE_CONTENT.Include_Character,
 
         confirmPassword: () => (value === require ? true : VALIDATE_CONTENT.Confirm_Password),
+        isExistData: () => (value && require ? true : false),
     });
     // PERMISS SUBMIT
-    permissSubmit = () => {
+    permissSubmit = async () => {
         if (Object.keys(this.state.error).length !== 5) return false;
         for (let element of Object.keys(this.state.error)) {
-            if (this.state.error[element] !== true) return false;
+            if (this.state.error[element] !== true || !this.state[element]) return false;
         }
         return true;
+    };
+    //
+    handleSubmit = async () => {
+        await this.handleVerifyEmail();
     };
     //
     handleOnChangePhone = (value) => {
@@ -130,6 +153,114 @@ class Register extends Component {
         } else {
             toast.error('Send OTP Failed!');
         }
+    };
+    //
+    handleSendOtpVerify = async () => {
+        if (!this.state.email && this.state.error['email'] !== true) return;
+        if (this.state.get_otp && !this.state.show_modal_verify) {
+            this.setState({
+                show_modal_verify: true,
+            });
+            return;
+        }
+        this.setState({
+            sending_otp: true,
+        });
+        //
+        const { data: response } = await sendEmailOTPService(this.state.email);
+        //
+        if (response && response.errCode === 0) {
+            console.log(response);
+            this.setState({
+                sending_otp: false,
+                get_otp: true,
+                show_modal_verify: true,
+            });
+            toast.success('Vui lòng kiểm tra Email của bạn để lấy mã xác minh!');
+        }
+    };
+    // HANDLE HIDDEN MODAL
+    handleHiddenModal = () => {
+        this.setState((prevState) => ({
+            show_modal_verify: !prevState.show_modal_verify,
+        }));
+    };
+    //
+    onChangeOtp = (otp) => {
+        console.log(otp);
+        this.setState({ otp });
+    };
+    //
+    createNewUser = async () => {
+        const { firstName, lastName, email, password } = this.state;
+        const { data: res } = await registerNewUserService({ firstName, lastName, email, password });
+        //
+        if (res && res.errCode === 0) {
+            toast.success('Đăng ký thành công');
+            this.setState({
+                option: 'Email',
+                hiddenPass: true,
+                hiddenComfirmPass: true,
+                firstName: '',
+                lastName: '',
+                email: '',
+                otp: '',
+                show_modal_verify: false,
+                Verified_mail: false,
+                sending_otp: false,
+                get_otp: false,
+                phone: '',
+                password: '',
+                confirmPassword: '',
+                error: {},
+                openErrorMess: false,
+            });
+        }
+        //
+        if (res && res.errCode !== 0) toast('Đăng ký thất bại!');
+        //
+    };
+    verifyOtp = async () => {
+        const { data: response } = await verifyOtpEmailService(this.state.email, this.state.otp);
+        if (response && response.errCode === 0) await this.createNewUser();
+
+        if (response.errCode !== 0 && response.errCode === 1) toast('Mã bạn nhập bị sai! Vui lòng thử lại');
+
+        if (response.errCode !== 0 && response.errCode === 2) toast('Mã đã hết hạn! Bạn có thể lấy mã mới');
+
+        if (response.errCode !== 0 && response.errCode !== 1 && response.errCode !== 2) toast('Đã xãy ra lỗi! Vui lòng thử lại');
+    };
+    // MODAL VERIFY OTP EMAIL OR PHONE
+    ModalVerifySignIn = (props) => {
+        return (
+            <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+                <Modal.Header closeButton>
+                    <Modal.Title style={{ color: '#1d9393' }} id="contained-modal-title-vcenter">
+                        Vui lòng nhập mã từ được gửi trong hòm thư để xác nhận Email!
+                    </Modal.Title>
+                </Modal.Header>
+                <ModalVerify>
+                    <Modal.Body>
+                        <OtpInput
+                            className="input-otp"
+                            value={this.state.otp}
+                            onChange={this.onChangeOtp}
+                            numInputs={6}
+                            renderSeparator={<span>-</span>}
+                            renderInput={(props) => <input {...props} />}
+                        />
+                    </Modal.Body>
+                </ModalVerify>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={this.handleSendOtpVerify}>
+                        {this.state.sending_otp ? <ClipLoader size={15} color="#fff" /> : 'Get Key'}
+                    </Button>
+                    <BtnVerify disabled={this.state.otp.length === 6 ? false : true} onClick={this.verifyOtp}>
+                        Verify
+                    </BtnVerify>
+                </Modal.Footer>
+            </Modal>
+        );
     };
     //
     //RENDER
@@ -150,7 +281,6 @@ class Register extends Component {
                     </Option>
                     <WrapperFill>
                         <Lable>First Name</Lable>
-
                         <IconInput>
                             <FontAwesomeIcon icon={faUser} />
                             <InputFill
@@ -177,10 +307,8 @@ class Register extends Component {
                             )}
                         </IconInput>
                     </WrapperFill>
-
                     <WrapperFill>
                         <Lable>Last Name</Lable>
-
                         <IconInput>
                             <FontAwesomeIcon icon={faUser} />
                             <InputFill
@@ -219,10 +347,11 @@ class Register extends Component {
                                         placeholder="John@email.com"
                                         name="email"
                                         onChange={(e) => this.handleChangeInput(e)}
-                                        onBlur={(e) =>
+                                        onBlur={async (e) =>
                                             this.validateOnBlur(e, {
                                                 isRequired: true,
                                                 isEmail: true,
+                                                isExistData: true,
                                             })
                                         }
                                     />
@@ -251,7 +380,6 @@ class Register extends Component {
                     </WrapperFill>
                     <WrapperFill>
                         <Lable>Password</Lable>
-
                         <IconInput>
                             <FontAwesomeIcon icon={faLock} />
                             <InputFill
@@ -329,12 +457,14 @@ class Register extends Component {
                             )}
                         </IconInput>
                     </WrapperFill>
-                    <SubmitBtn disabled={this.permissSubmit() ? false : true} onClick={this.permissSubmit}>
-                        ĐĂNG KÍ
+                    <SubmitBtn disabled={this.permissSubmit() ? false : true} onClick={this.handleSendOtpVerify}>
+                        {this.state.sending_otp ? <ClipLoader size={20} color="#fff" /> : 'ĐĂNG KÍ'}
                     </SubmitBtn>
                     <SignInBtn>
                         <Link to={path.LOGIN}>Đăng Nhập</Link>
                     </SignInBtn>
+
+                    <this.ModalVerifySignIn show={this.state.show_modal_verify} onHide={this.handleHiddenModal} />
                 </Wrapper>
             </Container>
         );
@@ -515,6 +645,7 @@ const InputFill = styled.input`
         src: url(${Poppins_Medium}) format('ttf');
         font-style: normal;
     }
+    position: relative;
     font-weight: 500;
     border: none;
     outline: none;
@@ -545,6 +676,7 @@ const SubmitBtn = styled.button`
         src: url(${Poppins_Medium}) format('ttf');
         font-style: normal;
     }
+    min-width: 106px;
     font-weight: 500;
     border: 1px solid #eee;
     font-size: 16px;
@@ -559,16 +691,20 @@ const SubmitBtn = styled.button`
     float: right;
     transition: all 0.3s linear;
     :hover {
-        scale: 1.1;
+        scale: 1.02;
         opacity: 1.6;
     }
     :disabled {
+        opacity: 0.9;
+        cursor: not-allowed;
+    }
+    /* :disabled {
         scale: 1;
         cursor: not-allowed;
         :hover {
             opacity: 0.8;
         }
-    }
+    } */
 `;
 const PhoneInputWrapper = styled.div`
     margin: 10px 0;
@@ -594,6 +730,26 @@ const VerifyPhoneNumber = styled.button`
     color: #757575;
     font-weight: 500;
 `;
+const VerifyEmailBtn = styled.div`
+    @font-face {
+        font-family: 'Poppins-Medium';
+        src: url(${Poppins_Medium}) format('ttf');
+        font-style: normal;
+    }
+    position: absolute;
+    right: 2px;
+    border: none;
+    padding: 8px 6px;
+    border-radius: 8px;
+    background-color: #ccc;
+    color: #757575;
+    font-weight: 500;
+    min-width: 75px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    cursor: pointer;
+`;
 const SignInBtn = styled.button`
     @font-face {
         font-family: 'Poppins-Medium';
@@ -609,5 +765,43 @@ const SignInBtn = styled.button`
         color: #1d9393;
         outline: none;
         text-decoration: none;
+    }
+`;
+const ModalVerify = styled.div`
+    display: flex;
+    .modal-body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    input {
+        width: 4rem !important;
+        height: 4rem;
+        margin: 0 5px;
+        font-size: 2rem;
+        border-radius: 4px;
+        border: 2px solid rgba(0, 0, 0, 0.8);
+        &:focus-visible {
+            border-color: #1d9393 !important;
+        }
+        &:active {
+            border-color: #1d9393 !important;
+        }
+    }
+    .modal-title {
+        color: #1d9393;
+    }
+`;
+const BtnVerify = styled.button`
+    border: none;
+    background: #1d9393 !important;
+    color: #fff;
+    font-size: 1.4rem;
+    padding: 8px 15px !important;
+    border-radius: 5px;
+    font-weight: 500 !important;
+    :disabled {
+        cursor: not-allowed;
+        background-color: #ccc !important;
     }
 `;

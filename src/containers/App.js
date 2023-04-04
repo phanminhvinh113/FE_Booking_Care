@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../components/GlobalStyle/Globalstyle.scss';
-import { userIsAuthenticated, userIsNotAuthenticated } from '../hoc/authentication';
+import { userIsAuthenticatedSystem, userIsNotAuthenticated, userIsAuthenticatedDoctor } from '../hoc/authentication';
 
 import { path } from '../utils';
 
@@ -17,7 +17,6 @@ import Doctor from '../routes/Doctor';
 
 import ConfirmModal from '../components/ConfirmModal';
 import HomePage from './HomePage/HomePage';
-import CustomScrollbar from '../components/CustomScrollbars';
 import DoctorDetailInfo from './Patient/Doctor/DoctorDetailInfo';
 import VerifyBookingDoctor from './Patient/Doctor/VerifyBookingDoctor';
 import SpecialtyDetailInfo from './Patient/Specialty/SpecialtyDetailInfo';
@@ -61,8 +60,8 @@ class App extends Component {
                             <Route exact path={path.HOME} component={Home} />
                             <Route path={path.REGISTER} component={Register} />
                             <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
-                            <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
-                            <Route path={path.DOCTOR} component={userIsAuthenticated(Doctor)} />
+                            <Route path={path.SYSTEM} component={userIsAuthenticatedSystem(System)} />
+                            <Route path={path.DOCTOR} component={userIsAuthenticatedDoctor(Doctor)} />
                             <Route path={path.HOMEPAGE} component={HomePage} />
                             <Route path={path.DETAILDOCTOR} component={DoctorDetailInfo} />
                             <Route path={path.DETAILSPECIALTY} component={SpecialtyDetailInfo} />

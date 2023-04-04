@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 import { getAllConversationDoctorService, getMessagePatientDoctorService, handleLogOutUserService } from '../../services/userService';
 import actionTypes from './actionTypes';
-
+import { SignOutSocial } from '../../containers/Auth/firebase';
 export const addUserSuccess = () => ({
     type: actionTypes.ADD_USER_SUCCESS,
 });
