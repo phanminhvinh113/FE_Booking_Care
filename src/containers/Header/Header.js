@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
+import { withRouter } from 'react-router';
 import * as actions from '../../store/actions';
 import Navigator from '../../components/Navigator';
 import { adminMenu, doctorMenu } from './menuApp';
-import './Header.scss';
 import _ from 'lodash';
-import { ROLE_USER } from '../../utils/constant';
+import { ROLE_USER, path } from '../../utils/constant';
+import { Link } from 'react-router-dom';
+import './Header.scss';
 
 class Header extends Component {
     constructor(props) {
@@ -17,20 +18,20 @@ class Header extends Component {
     }
     componentDidMount() {
         const { userInfo } = this.props;
-        if (userInfo && userInfo.roleId) {
-            if (userInfo.roleId === ROLE_USER.ADMIN) {
-                this.setState({
-                    menuApp: adminMenu,
-                });
-            } else if (userInfo.roleId === ROLE_USER.DOCTOR) {
-                this.setState({
-                    menuApp: doctorMenu,
-                });
-            }
+        if (userInfo && userInfo?.roleId === ROLE_USER.ADMIN) {
+            this.setState({
+                menuApp: adminMenu,
+            });
+        }
+        if (userInfo && userInfo?.roleId === ROLE_USER.DOCTOR) {
+            this.setState({
+                menuApp: doctorMenu,
+            });
         }
     }
+
     render() {
-        const { processLogout, userInfo } = this.props;
+        const { userInfo, processLogout } = this.props;
 
         return (
             <div className="header-container">
@@ -38,15 +39,15 @@ class Header extends Component {
                 <div className="header-tabs-container">
                     <Navigator menus={this.state.menuApp} />
                 </div>
-                <div style={{ margin: 'auto' }}>
-                    {userInfo && userInfo.firstName ? userInfo.firstName : ''}
-                    <span> </span>
+                <div className="name-user" style={{ margin: 'auto' }}>
                     {userInfo && userInfo.lastName ? userInfo.lastName : ''}
+                    <span> </span>
+                    {userInfo && userInfo.firstName ? userInfo.firstName : ''}
                 </div>
                 {/* nút logout */}
-                <div className="btn btn-logout" onClick={processLogout}>
+                <Link to={path.LOGIN} className="btn btn-logout" onClick={processLogout}>
                     <i className="fas fa-sign-out-alt"></i>
-                </div>
+                </Link>
             </div>
         );
     }
@@ -65,4 +66,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

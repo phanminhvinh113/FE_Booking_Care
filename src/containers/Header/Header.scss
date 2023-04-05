@@ -1,23 +1,40 @@
-@import "../../styles/common.scss";
-
+@import '../../styles/common.scss';
+@font-face {
+    font-family: 'Poppins-Regular';
+    src: url('../../assets/font/Poppins-Regular.ttf');
+}
 .header-container {
+    font-family: 'Poppins-Regular';
     z-index: 99;
     display: flex;
     justify-content: space-between;
-    background-color: $colormain;
-    color: $common-text-color;
-    height: 40px;
+    align-items: center;
+    background: url('../../assets/images/register_background_3.jpg');
+    background-position: center;
+    background-size: cover;
+    color: #1fa6c5a8;
+    box-shadow: 50px 0px 35px 10px rgba(0, 0, 0, 0.2);
+    height: 50px;
     position: relative;
+    font-size: 500;
+    .name-user {
+        font-weight: 500;
+        font-size: 2rem;
+    }
+    .header-tabs-container {
+        height: inherit;
+    }
     .btn-logout {
-        color: $common-text-color;
+        display: flex;
+        align-items: center;
+        color: #0dcaf0;
         line-height: 40px;
-        height: 40px;
+        height: 50px;
         padding: 0 10px;
+        transition: all 0.3s linear;
+        font-size: 2rem;
         &:hover {
-            background-color: darken($colormain, 5);
-        }
-        i {
-            font-size: $base-size + 1px;
+            scale: 1.1;
         }
     }
 }

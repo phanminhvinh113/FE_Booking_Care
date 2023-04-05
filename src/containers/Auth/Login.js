@@ -74,20 +74,10 @@ class Login extends Component {
                     errMessage: data.message ? data.message : data.Message,
                     isErrLogin: true,
                 });
-            } else if (data && data.errCode === 0) {
-                ////\IF ACCOUNT CORRECT\////
-                if (data.user.roleId === ROLE_USER.ADMIN) {
-                    this.props.history.push(path.ADMIN_REDIRECT_LOGGIN);
-                }
-                //
-                if (data.user.roleId === ROLE_USER.DOCTOR) {
-                    this.props.history.push(path.DOCTOR_REDIRECT_LOGGIN);
-                }
-                //
-                if (data.user.roleId === ROLE_USER.PATIENT) {
-                    this.props.history.push(path.HOMEPAGE);
-                }
-                //
+                return;
+            }
+            if (data && data.errCode === 0) {
+                //\IF ACCOUNT CORRECT\////
                 this.setState({
                     isErrLogin: false,
                 });
@@ -96,6 +86,8 @@ class Login extends Component {
                 this.sessionStorageToken('access_token', access_token);
                 //
                 await this.props.userLogInSucces(data.user);
+                //
+                this.props.history.push(path.HOME);
             }
         } catch (error) {
             this.setState({
@@ -116,14 +108,8 @@ class Login extends Component {
     handleLogInGoogle = async () => {
         try {
             const user = await logginWithGoogleFirebase();
-            if (user) {
-                console.log(user);
-                await this.props.userLogInSucces(user);
-                this.props.history.push(path.HOMEPAGE);
-            } else {
-                console.log('1');
-                toast.error('LOGGIN FALIED');
-            }
+            if (user) await this.props.userLogInSucces(user);
+            else toast.error('LOGGIN FALIED');
         } catch (error) {
             console.log(error);
             toast.error('LOGGIN FALIED');
@@ -132,14 +118,11 @@ class Login extends Component {
     handleLogInFaceBook = async () => {
         try {
             const result = await logginWithFaceBookFirebase();
-            console.log(result);
         } catch (error) {
-            console.log(error);
             toast.error('LOGGIN FALIED');
         }
     };
     responseFacebook = (response) => {
-        console.log(response);
         this.props.userLogInSucces({
             id: _.get(response, 'id', ''),
             firstName: _.get(response, 'name', ''),
@@ -147,7 +130,6 @@ class Login extends Component {
             image: _.get(response, 'picture.data.url', ''),
             roleId: 'R3',
         });
-        this.props.history.push(path.HOMEPAGE);
     };
     //////////////////////////\\RENDER DISPLAY\\/////////////////////////////
     render() {

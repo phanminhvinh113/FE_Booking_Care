@@ -2,15 +2,13 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import localization from 'moment/locale/vi';
 import * as actions from '../../store/actions';
 import Select from 'react-select';
 import DatePicker from '../../components/Input/DatePicker';
-import FormattedDate from '../../components/Formating/FormattedDate';
-import './Style/ScheduleDoctor.scss';
 import { dateFormat } from '../../utils';
 import { toast } from 'react-toastify';
 import { bulkCreateScheduleService } from '../../services/adminService';
+import './Style/ScheduleDoctor.scss';
 class ScheduleDoctor extends Component {
     constructor(props) {
         super(props);
@@ -132,7 +130,7 @@ class ScheduleDoctor extends Component {
         });
         return (
             <div className="manage-schedule-doctor-system">
-                <div className="title">MANAGE SCHEDULE </div>
+                <div className="title-schedule">MANAGE SCHEDULE </div>
                 <div className="content-schedule mt-4">
                     <div className="container">
                         <div className="row">
@@ -140,14 +138,10 @@ class ScheduleDoctor extends Component {
                                 <>
                                     <div className="col col-6">
                                         Choose doctor
-                                        <Select
-                                            value={this.state.selectedDoctor}
-                                            options={option}
-                                            onChange={this.handleChangeSelect}
-                                        />
+                                        <Select value={this.state.selectedDoctor} options={option} onChange={this.handleChangeSelect} />
                                     </div>
                                     <div className="col col-6">
-                                        Pick a day
+                                        <span className="pick-day"> Pick a day</span>
                                         <DatePicker
                                             className="form-control"
                                             onChange={this.handleOnChangeDatePicker}
@@ -159,8 +153,9 @@ class ScheduleDoctor extends Component {
                             )}
                             {this.state.roleId === 'R2' && (
                                 <div className="d-flex justify-content-center">
-                                    <div className="col col-12 w-25">
-                                        Pick a day
+                                    <div className="col col-12 w-25 day-picker">
+                                        <span> Pick a day</span>
+
                                         <DatePicker
                                             className="form-control"
                                             onChange={this.handleOnChangeDatePicker}
@@ -176,11 +171,7 @@ class ScheduleDoctor extends Component {
                                     schedule.map((time) => {
                                         return (
                                             <button
-                                                className={
-                                                    time.isSelected
-                                                        ? 'btn btn-outline-secondary btn-selected'
-                                                        : 'btn btn-schedule'
-                                                }
+                                                className={time.isSelected ? 'btn btn-outline-secondary btn-selected' : 'btn btn-schedule'}
                                                 key={time.keyMap}
                                                 onClick={() => this.handleSelectedRangeTime(time.keyMap)}
                                             >
@@ -190,7 +181,7 @@ class ScheduleDoctor extends Component {
                                     })}
                             </div>
                             <div className="col col-12  schedule-time-doctor">
-                                <button className="btn btn-primary" onClick={this.handleSaveSchedule}>
+                                <button className="btn-save" onClick={this.handleSaveSchedule}>
                                     Save
                                 </button>
                             </div>

@@ -1,11 +1,15 @@
-import { faUser, faEnvelope, faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
-import { faCircleExclamation, faLock } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import styled, { css, keyframes } from 'styled-components';
+import _ from 'lodash';
+import { path, TITLE_BROWSWER, VALIDATE, VALIDATE_CONTENT } from '../../utils';
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import OtpInput from 'react-otp-input';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { signUpWithPhoneNumber } from './firebase';
@@ -13,14 +17,10 @@ import Poppins_Bold from '../../assets/font/Poppins-Bold.ttf';
 import Poppins_Medium from '../../assets/font/Poppins-Medium.ttf';
 import Poppins_Regular from '../../assets/font/Poppins-Regular.ttf';
 import registerBackground from '../../assets/images/register_background.webp';
-import { path, TITLE_BROWSWER, VALIDATE, VALIDATE_CONTENT } from '../../utils';
-import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
 import { checkExistData, registerNewUserService, sendEmailOTPService, verifyOtpEmailService } from '../../services/userService';
 import { ClipLoader } from 'react-spinners';
-import OtpInput from 'react-otp-input';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+import { faUser, faEnvelope, faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
+import { faCircleExclamation, faLock } from '@fortawesome/free-solid-svg-icons';
 
 //
 class Register extends Component {
@@ -87,7 +87,7 @@ class Register extends Component {
                 error_mess = error_mess.concat(' ', check());
             }
         }
-
+        //
         if (!error_mess && options.isExistData) {
             e.persist();
             const { data: response } = await checkExistData(e.target.name, e.target.value);
@@ -198,7 +198,6 @@ class Register extends Component {
         if (res && res.errCode === 0) {
             toast.success('Đăng ký thành công');
             this.setState({
-                option: 'Email',
                 hiddenPass: true,
                 hiddenComfirmPass: true,
                 firstName: '',
@@ -222,6 +221,7 @@ class Register extends Component {
     };
     verifyOtp = async () => {
         const { data: response } = await verifyOtpEmailService(this.state.email, this.state.otp);
+
         if (response && response.errCode === 0) await this.createNewUser();
 
         if (response.errCode !== 0 && response.errCode === 1) toast('Mã bạn nhập bị sai! Vui lòng thử lại');

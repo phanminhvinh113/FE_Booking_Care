@@ -1,40 +1,44 @@
 @import '../styles/common.scss';
-
+@font-face {
+    font-family: 'Poppins-Medium';
+    src: url('../assets/font/Poppins-Regular.ttf');
+}
 .navigator-menu {
+    font-family: 'Poppins-Medium';
     display: flex;
     margin: 0;
     padding: 0;
     &.list-unstyled,
     .list-unstyled {
         list-style-type: none;
+        height: inherit;
+        display: flex;
+        align-items: center;
     }
     .menu-group {
         &:hover {
             cursor: pointer;
-            background-color: darken($colormain, 5);
         }
         .menu-group-name {
-            line-height: 40px;
+            line-height: 50px;
             padding: 0 15px;
-            border-right: 1px solid $border;
-            &:first-child {
-                border-left: 1px solid $border;
-            }
+            font-size: 1.65rem;
         }
         .menu-list {
             display: none;
-            background-color: $bg-menu-color;
             box-shadow: 2px 2px 4px 0 $box-shadow-color;
             -webkit-box-shadow: 2px 2px 4px 0 $box-shadow-color;
             color: $text-in-light;
             position: absolute;
             padding: 0;
+            background-color: #fff;
+            border-radius: 6px;
+            border: 1px solid #eee;
             .menu {
-                width: 205px;
-                padding: 0 15px;
-                height: 35px;
-                line-height: 35px;
+                padding: 12px 15px;
                 text-transform: none;
+                border-radius: 6px;
+                font-size: 1.5rem;
                 .menu-link {
                     text-decoration: none;
                     color: $text-in-light;
@@ -70,15 +74,14 @@
                     }
                 }
                 &:hover {
-                    background-color: darken($bg-menu-color, 3);
+                    background-color: #eeeeee63;
                     .sub-menu-list {
                         display: block;
                     }
                 }
                 &.active {
                     font-weight: 500;
-
-                    background-color: #ccc;
+                    background-color: #0dcaf036;
                 }
                 .icon-right {
                     display: block;

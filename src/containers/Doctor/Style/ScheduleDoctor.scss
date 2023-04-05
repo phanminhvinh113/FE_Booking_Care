@@ -1,4 +1,23 @@
+@font-face {
+    font-family: 'Poppins-Bold';
+    src: url('../../../assets/font/Poppins-Bold.ttf');
+}
+@font-face {
+    font-family: 'Poppins-Regular';
+    src: url('../../../assets/font/Poppins-Regular.ttf');
+}
 .manage-schedule-doctor-system {
+    background: url('../../../assets/images/back-groud-system-1.webp');
+    height: 100vh;
+    font-family: 'Poppins-Regular';
+    .title-schedule {
+        font-family: 'Poppins-Bold';
+        padding-top: 15px;
+        margin: 0 auto;
+        text-align: center;
+        font-size: 3rem;
+        color: #588287;
+    }
     .schedule-time-doctor {
         gap: 15px;
         display: flex;
@@ -10,11 +29,34 @@
         .btn-schedule {
             &:hover {
                 opacity: 0.8;
+                background-color: #d1ecf3eb;
             }
         }
         .btn-selected {
-            background-color: #6c757d;
+            background-color: #0699c1c7;
             color: #fff;
+            border: 1px solid #cccccc73;
+        }
+    }
+    .btn-save {
+        border: none !important;
+        background-color: #85d5ff;
+        color: #025872;
+        border-radius: 8px;
+        padding: 12px 20px;
+        font-size: 1.6rem;
+        transition: all 0.3s linear;
+        &:hover {
+            opacity: 0.7;
+            scale: 1.05;
+        }
+    }
+    .day-picker {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        span {
+            margin: 6px 0;
         }
     }
 }

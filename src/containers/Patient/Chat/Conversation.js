@@ -25,7 +25,8 @@ class Conversation extends Component {
             fullListMess: false,
         };
         this.textInput = React.createRef();
-        this.messagesEndRef = React.createRef();
+        this.targetMess = React.createRef();
+        this.messageRef = React.createRef();
         this.messageContent = React.createRef();
     }
     // DID MOUNT
@@ -33,10 +34,15 @@ class Conversation extends Component {
         //
         this.props.socket.on('get-message', (message) => {
             if (message && message.senderId === this.props.inforDoctor?.id) {
-                this.setState({
-                    arrMess: [...this.state.arrMess, message],
-                    textMessage: '',
-                });
+                this.setState(
+                    {
+                        arrMess: [...this.state.arrMess, message],
+                        textMessage: '',
+                    },
+                    () => {
+                        this.messageRef.current?.scrollIntoView({ behavior: 'smooth' });
+                    },
+                );
             }
         });
         //
@@ -54,7 +60,6 @@ class Conversation extends Component {
             this.setState({
                 arrMess: [...this.props.Conversation, ...this.state.arrMess],
             });
-            this.messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
         }
         //
     }
@@ -66,6 +71,7 @@ class Conversation extends Component {
 
     //SCROLL SEE HISTORY MESSAGE
     handleScroll = async () => {
+        console.log(this.messageContent.current.scrollHeight);
         if (this.messageContent.current.scrollTop === 0 && !this.state.fullListMess) {
             //
             this.setState((prevState) => ({
@@ -88,6 +94,9 @@ class Conversation extends Component {
                     hasMore: false,
                 });
             }
+            //
+            console.log(this.messageContent.current?.scrollHeight);
+            console.log(this.messageContent.current?.scrollTop);
         }
     };
     //INPUT TYPE
@@ -111,17 +120,22 @@ class Conversation extends Component {
         //
         if (this.state.textMessage.trim()) {
             this.props.sendMessage(this.props.userInfo?.id, this.props.inforDoctor?.id, this.state.textMessage);
-            this.setState({
-                textMessage: '',
-                arrMess: [
-                    ...this.state.arrMess,
-                    {
-                        senderId: _.get(this.props.userInfo, 'id', 'guest'),
-                        text: this.state.textMessage,
-                        time: new Date(),
-                    },
-                ],
-            });
+            this.setState(
+                {
+                    textMessage: '',
+                    arrMess: [
+                        ...this.state.arrMess,
+                        {
+                            senderId: _.get(this.props.userInfo, 'id', 'guest'),
+                            text: this.state.textMessage,
+                            time: new Date(),
+                        },
+                    ],
+                },
+                () => {
+                    this.messagesRef.current?.scrollIntoView({ behavior: 'smooth' });
+                },
+            );
         }
         //
         if (!this.state.textMessage.trim()) {
@@ -165,7 +179,7 @@ class Conversation extends Component {
                                     className={`conversation-message ${
                                         item.senderId === _.get(this.props.inforDoctor, 'id', 'null') ? 'doctor' : 'other'
                                     }`}
-                                    ref={this.messagesEndRef}
+                                    ref={index === 0 ? this.targetMess : this.messageRef}
                                 >
                                     <img
                                         src={

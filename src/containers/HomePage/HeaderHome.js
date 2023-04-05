@@ -24,7 +24,7 @@ class HomeHeader extends Component {
                     <div className="home-header-content">
                         <div className="header">
                             <SideBarNav />
-                            <div className="logo"></div>
+                            <Link to={path.HOMEPAGE} className="logo"></Link>
                         </div>
                         <div className="body">
                             <div>

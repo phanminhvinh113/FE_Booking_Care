@@ -5,6 +5,7 @@ import { io } from 'socket.io-client';
 import styled from 'styled-components';
 import ChatGroup from './ChatGroup';
 import ConversationMessage from './ConversationMessage';
+import Background from '../../../assets/images/Chat/chat-group.jpg';
 import PropTypes from 'prop-types';
 
 class ManageConversationDoctor extends Component {
@@ -66,8 +67,11 @@ export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ManageCon
 
 //STYLE
 const Wrapper = styled.div`
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
     position: fixed;
-    top: 40px;
+    top: 49px;
     right: 0;
     left: 0;
     bottom: 0;

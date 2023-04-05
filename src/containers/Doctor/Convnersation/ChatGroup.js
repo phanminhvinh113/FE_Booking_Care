@@ -4,9 +4,11 @@ import { withRouter } from 'react-router';
 import { toast } from 'react-toastify';
 import * as actions from '../../../store/actions';
 import _ from 'lodash';
+import BackGroundGroup from '../../../assets/images/register_background_3.jpg';
 import GuestAvatar from '../../../assets/images/Chat/guest.png';
 import CustomScrollbar from '../../../components/CustomScrollbars';
 import styled from 'styled-components';
+import Poppins_Medium from '../../../assets/font/Poppins-Medium.ttf';
 import PropTypes from 'prop-types';
 
 class ChatGroup extends Component {
@@ -103,19 +105,33 @@ const mapDispatchToProps = (dispatch) => {
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatGroup));
 //
 const Wrapper = styled.div`
+    @font-face {
+        font-family: 'Poppins-Medium';
+        src: url(${Poppins_Medium}) format('ttf');
+        font-style: normal;
+    }
+    font-family: 'Poppins-Medium';
     height: 100vh;
     width: 200px;
     background-color: #ccc;
 `;
-const ListConversation = styled.div``;
+const ListConversation = styled.div`
+    height: 100%;
+    background-image: linear-gradient(to bottom right, #e0eafc, #c4e0e5);
+    /* background: url(${BackGroundGroup});
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover; */
+`;
 const ItemConversaiton = styled.div`
     display: flex;
     align-items: flex-end;
     padding: 8px 5px;
     cursor: pointer;
-    background-color: ${(props) => (props.active ? '#e5e5e5' : 'transparent')};
+    background-color: ${(props) => (props.active ? '#8dd2f7a8' : 'transparent')};
+    border-radius: 8px;
     &:hover {
-        background-color: #e5e5e5;
+        background-color: #3eaed51a;
         border-radius: 5px;
     }
     margin-top: 2px;
@@ -128,7 +144,8 @@ const Image = styled.div`
     background-size: cover;
 `;
 const Name = styled.p`
-    font-size: 1.8rem;
+    font-size: 1.75rem;
     margin-left: 10px;
     font-weight: 500;
+    color: #22221fab;
 `;

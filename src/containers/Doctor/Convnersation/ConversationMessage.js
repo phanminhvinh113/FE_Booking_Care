@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import _ from 'lodash';
+import _, { entries } from 'lodash';
 import * as actions from '../../../store/actions';
 import styled, { css } from 'styled-components';
+import BackGroundChat from '../../../assets/images/Chat/chat-group.jpg';
 import { format } from 'timeago.js';
 import imgGuest from '../../../assets/images/Chat/guest.png';
 import imgBookingCare from '../../../assets/images/Chat/bookingcare_chat.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { ClipLoader } from 'react-spinners';
+
 import PropTypes from 'prop-types';
 
 class ConversationMessage extends Component {
@@ -18,51 +21,88 @@ class ConversationMessage extends Component {
             text: '',
             arrMessage: [],
             image: null,
+            limit: 20,
+            offset: 0,
+            getMore: false,
+            loading: false,
+            fullMessage: false,
+            scrollTo: 0,
         };
+        //
+        this.observer = null;
         this.InputRef = React.createRef();
         this.Message = React.createRef();
+        this.targetRef = React.createRef();
+        this.ChatBox = React.createRef();
+        //
     }
     //
     async componentDidMount() {
         //
         this.props.socket.on('get-message', async (message) => {
             if (message && message.senderId === this.props.patientInfo?.User.id && message.receiverId === this.props.doctorInfo?.id) {
-                this.setState({
-                    arrMessage: [...this.state.arrMessage, message],
-                    text: '',
-                });
+                this.setState(
+                    {
+                        arrMessage: [...this.state.arrMessage, message],
+                        text: '',
+                    },
+                    () => {
+                        this.ChatBox.current.scrollTop = this.ChatBox.current?.scrollHeight;
+                    },
+                );
             }
         });
         //
         this.Message.current?.scrollIntoView({ behavior: 'smooth' });
-
         //
         if (this.props.patientInfo && this.props.doctorInfo) {
             await this.getMessageFromServer(this.props.doctorInfo?.id, this.props.patientInfo?.User.id);
         }
+        //
+        this.ChatBox.current.scrollTop = this.ChatBox.current?.scrollHeight;
+        //
+        this.setState({
+            scrollTo: this.ChatBox.current?.scrollHeight,
+        });
+        //
+        this.intersectionObsever();
     }
     //
     async componentDidUpdate(prevProps, prevState, snapshot) {
         //
         if (prevState.arrMessage !== this.state.arrMessage) {
-            this.Message.current?.scrollIntoView({ behavior: 'smooth' });
+            // this.targetRef.current?.scrollIntoView({ behavior: 'smooth' });
+            // console.log(this.targetRef.current);
         }
         //
         if (prevProps.patientInfo !== this.props.patientInfo) {
+            this.state.arrMessage = [];
+            this.state.offset = 0;
+            this.state.scrollTo = this.ChatBox.current?.scrollHeight;
+            console.log(this.ChatBox.current.scrollHeight);
+
             await this.getMessageFromServer(this.props.doctorInfo?.id, this.props.patientInfo?.User.id);
+
+            this.ChatBox.current.scrollTop = this.ChatBox.current.scrollHeight;
+            this.intersectionObsever();
+        }
+        //
+        if (prevProps.Conversation !== this.props.Conversation && prevProps.patientInfo === this.props.patientInfo) {
+            this.setState((prev) => ({
+                arrMessage: [...this.props.Conversation.sort((a, b) => a.time - b.time), ...prev.arrMessage],
+                fullMessage: this.props.Conversation.length < this.state.limit ? true : false,
+                scrollTo: this.ChatBox.current.scrollHeight,
+            }));
         }
     }
-
+    componentWillUnmount() {
+        if (this.observer) {
+            this.observer.disconnect();
+        }
+    }
     //GET MESSAGE FROM SEVER
     getMessageFromServer = async (senderId, receiverId) => {
-        //
         await this.props.getMessagePatientDoctor({ senderId, receiverId });
-        //
-        if (this.props.Conversation) {
-            this.setState({
-                arrMessage: this.props.Conversation.sort((a, b) => a.time - b.time),
-            });
-        }
     };
     //
     handleOnChangeInput = (e) => {
@@ -98,17 +138,23 @@ class ConversationMessage extends Component {
                 _.get(this.props.patientInfo?.User, 'id', 'null'),
                 this.state?.text.trim(),
             );
-            this.setState({
-                arrMessage: [
-                    ...this.state.arrMessage,
-                    {
-                        senderId: _.get(this.props.doctorInfo, 'id', 'null'),
-                        text: this.state?.text.trim() || ' ',
-                        time: new Date(),
-                    },
-                ],
-                text: '',
-            });
+            this.setState(
+                {
+                    arrMessage: [
+                        ...this.state.arrMessage,
+                        {
+                            senderId: _.get(this.props.doctorInfo, 'id', 'null'),
+                            text: this.state?.text.trim() || ' ',
+                            time: new Date(),
+                        },
+                    ],
+                    text: '',
+                },
+                () => {
+                    this.ChatBox.current.scrollTop = this.ChatBox.current?.scrollHeight;
+                },
+            );
+
             this.pushPatientOnTopList(this.props.listConversation, this.props.patientInfo?.senderId);
         }
         if (!this.state.text.trim()) {
@@ -131,6 +177,45 @@ class ConversationMessage extends Component {
         //
         this.props.sortListConversation(_.get(this.props.patientInfo, 'senderId', 'null'));
     };
+    //
+    getMoreMessage = async () => {
+        this.setState({
+            getMore: true,
+            loading: true,
+        });
+        setTimeout(async () => {
+            this.setState((prevState) => ({
+                offset: prevState.offset + this.state.limit,
+            }));
+            if (this.props.doctorInfo && this.props.patientInfo) {
+                await this.props.getMessagePatientDoctor({
+                    senderId: this.props.doctorInfo?.id,
+                    receiverId: this.props.patientInfo?.User.id,
+                    limit: this.state.limit,
+                    offset: this.state.offset,
+                });
+            }
+
+            this.ChatBox.current.scrollTop = this.ChatBox.current?.scrollHeight - this.state.scrollTo;
+
+            this.setState({
+                getMore: false,
+                loading: false,
+            });
+        }, 1000);
+    };
+    //
+    intersectionObsever = () => {
+        const options = {
+            threshold: 1,
+        };
+        this.observer = new IntersectionObserver(async (entries) => {
+            if (entries[0].isIntersecting && !this.state.fullMessage) {
+                await this.getMoreMessage();
+            }
+        }, options);
+        this.targetRef.current && this.observer.observe(this.targetRef.current);
+    };
     render() {
         return (
             <Wrapper>
@@ -147,10 +232,15 @@ class ConversationMessage extends Component {
                     )}
                     {!this.props.patientInfo && <h2>CHỌN BỆNH NHÂN</h2>}
                 </Header>
-                <MainChat withScroll={'8px'}>
+                <MainChat ref={this.ChatBox} withScroll={'8px'}>
+                    {this.state.loading && <ClipLoader size={22} color="#ccc" className="loading" />}
                     {this.state.arrMessage &&
                         this.state.arrMessage.map((item, index) => (
-                            <MessItem ref={this.Message} key={index} type={item.senderId === this.props.doctorInfo.id ? true : false}>
+                            <MessItem
+                                ref={index === 0 ? this.targetRef : this.Message}
+                                key={index}
+                                type={item.senderId === this.props.doctorInfo.id ? true : false}
+                            >
                                 <img
                                     src={
                                         item.senderId === this.props.doctorInfo?.id
@@ -198,7 +288,7 @@ const mapStateToProps = (state) => {
 //
 const mapDispatchToProps = (dispatch) => {
     return {
-        getMessagePatientDoctor: (senderId, receiverId) => dispatch(actions.getMessagePatientDoctor(senderId, receiverId)),
+        getMessagePatientDoctor: (requirement) => dispatch(actions.getMessagePatientDoctor(requirement)),
         sortListConversation: (newListConversation) => dispatch(actions.sortListConversation(newListConversation)),
     };
 };
@@ -231,9 +321,13 @@ const scrollbar = styled.div`
 `;
 //MAIN CONVERSATION
 const MainChat = styled(scrollbar)`
+    display: grid;
     padding: 10px;
     overflow-y: overlay;
     height: 75%;
+    .loading {
+        margin: auto;
+    }
 `;
 const MessItem = styled.div`
     display: flex;
@@ -270,13 +364,14 @@ const Time = styled.div`
 const Wrapper = styled.div`
     width: 100%;
     position: relative;
+    background: url(${BackGroundChat});
 `;
 //
 const Header = styled.header`
     display: flex;
     align-items: center;
     padding: 10px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #cccccc69;
     height: 10%;
     width: 100%;
     z-index: 2;

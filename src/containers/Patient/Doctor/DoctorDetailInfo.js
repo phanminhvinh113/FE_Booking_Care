@@ -25,7 +25,7 @@ class DoctorDetailInfo extends Component {
     //// DID MOUNT ////
     async componentDidMount() {
         //SCROLL ON TOP AND SET TITLE
-        document.title = this.props.inforDoctor.DoctorInfo?.name;
+
         document.body.scrollTop = this.props.positionDoctorPage;
         //PROPS
         const { match, getDetailInfoDoctor } = this.props;
@@ -41,6 +41,7 @@ class DoctorDetailInfo extends Component {
                 });
             }
         }
+        document.title = this.props.inforDoctor.DoctorInfo?.name || '';
     }
 
     ///// DID UPDATE /////

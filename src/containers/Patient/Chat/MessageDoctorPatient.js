@@ -27,6 +27,7 @@ class MessageDoctorPatient extends Component {
             limit: 20,
             hasMore: false,
             fullListMess: false,
+            scroll: 0,
         };
         //
         this.ChatBox = React.createRef();
@@ -62,6 +63,8 @@ class MessageDoctorPatient extends Component {
         //
         document.addEventListener('mousedown', this.handleClickOutSide);
         this.messageContent.current.addEventListener('scroll', this.handleScroll);
+
+        //
     }
     //UPDATE
     async componentDidUpdate(prevProps, prevState, snapshot) {
@@ -73,6 +76,7 @@ class MessageDoctorPatient extends Component {
             this.setState({
                 arrMess: [...this.props.Conversation, ...this.state.arrMess],
                 viewIndex: this.props.Conversation.length - (this.state.limit - this.props.Conversation.length),
+                scroll: this.messageContent.current?.scrollHeight,
             });
         }
         //
@@ -163,11 +167,7 @@ class MessageDoctorPatient extends Component {
                         },
                     ],
                 },
-                () =>
-                    this.messageContent.current.scrollTo({
-                        top: this.messageContent.current.scrollHeight,
-                        behavior: 'smooth',
-                    }),
+                () => (this.messageContent.current.scrollTop = this.messageContent.current.scrollHeight),
             );
         } else {
             this.setState({
@@ -187,9 +187,11 @@ class MessageDoctorPatient extends Component {
                 offset: this.state.offset,
                 limit: this.state.limit,
             });
+            this.messageContent.current.scrollTop = this.messageContent.current?.scrollHeight - this.state.scroll;
             this.setState({
                 fullListMess: this.state.arrMess.length < this.state.limit + this.state.offset ? true : false,
                 hasMore: false,
+                scroll: this.messageContent.current?.scrollHeight,
             });
         }, 200);
     };

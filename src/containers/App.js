@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import '../components/GlobalStyle/Globalstyle.scss';
 import { userIsAuthenticatedSystem, userIsNotAuthenticated, userIsAuthenticatedDoctor } from '../hoc/authentication';
 
-import { path } from '../utils';
+import { ROLE_USER, path } from '../utils';
 
 import Home from '../routes/Home';
 import Register from './Auth/Register';
@@ -59,9 +59,13 @@ class App extends Component {
                         <Switch>
                             <Route exact path={path.HOME} component={Home} />
                             <Route path={path.REGISTER} component={Register} />
-                            <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
-                            <Route path={path.SYSTEM} component={userIsAuthenticatedSystem(System)} />
-                            <Route path={path.DOCTOR} component={userIsAuthenticatedDoctor(Doctor)} />
+                            {this.props.isLoggedIn && this.props?.userInfo?.roleId === ROLE_USER.ADMIN && (
+                                <Route path={path.SYSTEM} component={userIsAuthenticatedSystem(System)} />
+                            )}
+                            {this.props.isLoggedIn && this.props?.userInfo?.roleId === ROLE_USER.DOCTOR && (
+                                <Route path={path.DOCTOR} component={userIsAuthenticatedDoctor(Doctor)} />
+                            )}
+                            <Route path={path.LOGIN} component={Login} />
                             <Route path={path.HOMEPAGE} component={HomePage} />
                             <Route path={path.DETAILDOCTOR} component={DoctorDetailInfo} />
                             <Route path={path.DETAILSPECIALTY} component={SpecialtyDetailInfo} />

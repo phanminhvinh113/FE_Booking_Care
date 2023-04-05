@@ -14,7 +14,6 @@ class FeedBackDoctor extends Component {
     }
     //// DID MOUNT ////
     async componentDidMount() {}
-
     ///// DID UPDATE /////
     async componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.feedbacks !== this.props.feedbacks) {
@@ -23,7 +22,6 @@ class FeedBackDoctor extends Component {
             });
         }
     }
-
     //// RENDER ///
     render() {
         return (
@@ -35,13 +33,13 @@ class FeedBackDoctor extends Component {
                             this.state.feedbacks.map((feedback, index) => {
                                 return (
                                     <div key={index} className="patient-feedback">
-                                        <strong>{feedback.patient.firstName}</strong>
+                                        <strong>{feedback?.patient?.firstName || ''}</strong>
                                         <span className="rate">
-                                            {feedback.rate}
+                                            {feedback?.rate || ''}
                                             <FontAwesomeIcon icon={faStar} />
                                         </span>
-                                        <span className="date"> Vào ngày {feedback.date}</span>
-                                        <div className="comment">{feedback.comment}</div>
+                                        <span className="date"> Vào ngày {feedback?.date || ''}</span>
+                                        <div className="comment">{feedback?.comment || ''}</div>
                                     </div>
                                 );
                             })}

@@ -5,13 +5,13 @@ import { ROLE_USER, path } from '../utils';
 const locationHelper = locationHelperBuilder({});
 
 export const userIsAuthenticatedSystem = connectedRouterRedirect({
-    authenticatedSelector: (state) => state.user.isLoggedIn && state.user.userInfo.roleId === ROLE_USER.ADMIN,
+    authenticatedSelector: (state) => state.user.isLoggedIn,
     wrapperDisplayName: 'UserIsAuthenticated',
     redirectPath: path.LOGIN,
 });
 
 export const userIsAuthenticatedDoctor = connectedRouterRedirect({
-    authenticatedSelector: (state) => state.user.isLoggedIn && state.user.userInfo.roleId === ROLE_USER.DOCTOR,
+    authenticatedSelector: (state) => state.user.isLoggedIn,
     wrapperDisplayName: 'DoctorIsAuthenticated',
     redirectPath: path.LOGIN,
 });
