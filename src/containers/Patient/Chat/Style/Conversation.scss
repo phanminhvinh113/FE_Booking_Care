@@ -10,6 +10,7 @@
     animation: scaleConversationOpen 0.4s ease-in-out;
 
     .header {
+        font-family: 'Font';
         height: 55px;
         width: 100%;
         background-color: #45c3d2;
@@ -59,7 +60,10 @@
             max-height: 150px;
             overflow-y: overlay;
             user-select: text;
-
+            span {
+                background-color: transparent !important;
+                color: #0e0d0d !important;
+            }
             &:empty:before {
                 content: attr(data-placeholder);
                 color: gray;

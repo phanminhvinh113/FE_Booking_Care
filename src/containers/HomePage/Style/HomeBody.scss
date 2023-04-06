@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Font';
+    src: url('../../../assets/font/Font.woff2');
+}
+
 .home-body-container {
     background: url('../../../assets/images/bookingcare-cover-4.jpg') no-repeat center;
     background-size: cover;
@@ -35,9 +40,11 @@
         align-items: center;
         flex-wrap: wrap;
         .content-service {
+            font-family: 'Font';
             width: 20%;
             text-align: center;
             cursor: pointer;
+            font-size: 1.48rem;
             &:hover {
                 color: #45c3d2;
             }
@@ -53,6 +60,9 @@
                     position: absolute;
                     top: 5px;
                     right: 11%;
+                }
+                span {
+                    font-family: 'Helvetica-Neue';
                 }
             }
         }

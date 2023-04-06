@@ -1,4 +1,12 @@
 .section_specialty {
+    @font-face {
+        font-family: 'Font';
+        src: url('../../../../assets/font/Font.woff2');
+    }
+    @font-face {
+        font-family: 'Anuphan-VariableFont';
+        src: url('../../../../assets/font/Anuphan-VariableFont_wght.ttf');
+    }
     height: 330px;
     padding: 25px;
     background: #f5f5f5;
@@ -8,9 +16,9 @@
         font-size: 24px;
         padding: 15px 0px 20px 0px;
         margin-left: 10px;
+        font-weight: 600;
     }
-    .specialty_content {
-    }
+
     img {
         width: 278px !important;
         height: 156.38px !important;
@@ -20,9 +28,9 @@
         }
     }
     h3 {
-        font-family: 'Montserrat', sans-serif;
+        font-family: 'Anuphan-VariableFont';
         margin-top: 5px;
-        font-size: 1.3rem;
+        font-size: 1.5rem;
         outline: none;
         user-select: none;
     }

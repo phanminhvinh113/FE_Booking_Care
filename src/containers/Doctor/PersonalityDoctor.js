@@ -184,102 +184,100 @@ class PersonalityDoctor extends Component {
     render() {
         const { listPayment, listPrice, listProvince, listSpecialty } = this.state;
         return (
-            <div className="manage-info-personality-doctor container ">
-                <h1 className="title mt-4"> MANAGE DOCTOR</h1>
+            <div className="manage-info-personality-doctor ">
+                <div className="container">
+                    <h1 className="title-personality "> PERSONALITY</h1>
+                    <div className="row mt-4 mb-4">
+                        <div className="col-6 mt-4">
+                            <label>Tên bác sĩ và chức danh</label>
+                            <input className="form-control" value={this.state.name} onChange={(e) => this.handleChangeValueInput(e, 'name')} />
+                        </div>
+                        <div className="col-6 mt-4">
+                            <div>Chuyên khoa</div>
+                            <Select
+                                value={this.state.selectedSpecialty ? this.state.selectedSpecialty : ''}
+                                options={listSpecialty}
+                                onChange={this.handleChangeSelectInfoMedical}
+                                name="selectedSpecialty"
+                                placeholder="Chọn chuyên khoa"
+                            />
+                        </div>
+                        <div className="col-6 mt-4">
+                            <div>Tỉnh thành</div>
+                            <Select
+                                value={this.state.selectedProvince}
+                                options={listProvince}
+                                onChange={this.handleChangeSelectInfoMedical}
+                                name="selectedProvince"
+                                placeholder="Tỉnh thành"
+                            />
+                        </div>
+                        <div className="col-6 mt-4">
+                            <div>Giá</div>
+                            <Select
+                                value={this.state.selectedPrice}
+                                options={!!listPrice.length ? listPrice : []}
+                                onChange={this.handleChangeSelectInfoMedical}
+                                name="selectedPrice"
+                                placeholder="Bảng Giá"
+                            />
+                        </div>
+                        <div className="col-6 mt-4">
+                            <div>Phương Thức Thanh Toán</div>
+                            <Select
+                                value={this.state.selectedPayment}
+                                options={listPayment}
+                                onChange={this.handleChangeSelectInfoMedical}
+                                name="selectedPayment"
+                                placeholder="Phương thức thanh toán"
+                            />
+                        </div>
+                        <div className="col-6 mt-4">
+                            <label>Tên Phòng Khám</label>
+                            <input
+                                className="form-control"
+                                value={this.state.nameClinic}
+                                onChange={(e) => this.handleChangeValueInput(e, 'nameClinic')}
+                            />
+                        </div>
+                        <div className="col-6 mt-4">
+                            <label>Địa Chỉ Phòng Khám</label>
+                            <input
+                                className="form-control"
+                                value={this.state.addressClinic}
+                                onChange={(e) => this.handleChangeValueInput(e, 'addressClinic')}
+                            />
+                        </div>
+                        <div className="col-3 mt-4">
+                            <lable>Ảnh</lable>
+                            <input className="form-control file-image" type={'file'} onChange={(e) => this.handleChangeImage(e)} />
+                        </div>
+                        <div className="col-3 mt-4 avatar-doctor">{!!this.state.UrlImage && <img src={this.state.UrlImage} />}</div>
 
-                <div className="row mt-4 mb-4">
-                    <div className="col-6 mt-4">
-                        <label>Tên bác sĩ và chức danh</label>
-                        <input
-                            className="form-control"
-                            value={this.state.name}
-                            onChange={(e) => this.handleChangeValueInput(e, 'name')}
-                        />
+                        {/* //////////////////////////// */}
+                        <div className="col-12 mt-4">
+                            <div>Desciption</div>
+                            <textarea
+                                rows="4"
+                                style={{ width: '100%', padding: '10px' }}
+                                onChange={(e) => this.handleChangeValueInput(e)}
+                                value={this.state.description}
+                            />
+                        </div>
                     </div>
-                    <div className="col-6 mt-4">
-                        <div>Chuyên khoa</div>
-                        <Select
-                            value={this.state.selectedSpecialty ? this.state.selectedSpecialty : ''}
-                            options={listSpecialty}
-                            onChange={this.handleChangeSelectInfoMedical}
-                            name="selectedSpecialty"
-                            placeholder="Chọn chuyên khoa"
-                        />
-                    </div>
-                    <div className="col-6 mt-4">
-                        <div>Tỉnh thành</div>
-                        <Select
-                            value={this.state.selectedProvince}
-                            options={listProvince}
-                            onChange={this.handleChangeSelectInfoMedical}
-                            name="selectedProvince"
-                            placeholder="Tỉnh thành"
-                        />
-                    </div>
-                    <div className="col-6 mt-4">
-                        <div>Giá</div>
-                        <Select
-                            value={this.state.selectedPrice}
-                            options={!!listPrice.length ? listPrice : []}
-                            onChange={this.handleChangeSelectInfoMedical}
-                            name="selectedPrice"
-                            placeholder="Bảng Giá"
-                        />
-                    </div>
-                    <div className="col-6 mt-4">
-                        <div>Phương Thức Thanh Toán</div>
-                        <Select
-                            value={this.state.selectedPayment}
-                            options={listPayment}
-                            onChange={this.handleChangeSelectInfoMedical}
-                            name="selectedPayment"
-                            placeholder="Phương thức thanh toán"
-                        />
-                    </div>
-                    <div className="col-6 mt-4">
-                        <label>Tên Phòng Khám</label>
-                        <input
-                            className="form-control"
-                            value={this.state.nameClinic}
-                            onChange={(e) => this.handleChangeValueInput(e, 'nameClinic')}
-                        />
-                    </div>
-                    <div className="col-6 mt-4">
-                        <label>Địa Chỉ Phòng Khám</label>
-                        <input
-                            className="form-control"
-                            value={this.state.addressClinic}
-                            onChange={(e) => this.handleChangeValueInput(e, 'addressClinic')}
-                        />
-                    </div>
-                    <div className="col-3 mt-4">
-                        <lable>Ảnh</lable>
-                        <input className="form-control file-image" type={'file'} onChange={(e) => this.handleChangeImage(e)} />
-                    </div>
-                    <div className="col-3 mt-4 avatar-doctor">{!!this.state.UrlImage && <img src={this.state.UrlImage} />}</div>
 
-                    {/* //////////////////////////// */}
-                    <div className="col-12 mt-4">
-                        <div>Desciption</div>
-                        <textarea
-                            rows="4"
-                            style={{ width: '100%', padding: '10px' }}
-                            onChange={(e) => this.handleChangeValueInput(e)}
-                            value={this.state.description}
-                        />
-                    </div>
+                    <h1 className="title-personality"> Detail Infomation Doctor</h1>
+                    <MdEditor
+                        style={{ height: '480px' }}
+                        renderHTML={(text) => mdParser.render(text)}
+                        onChange={this.handleEditorChange}
+                        value={this.state.contentMarkdown}
+                    />
+                    <button className="btn btn-primary mt-4" onClick={this.handleSaveInfoDoctor}>
+                        Save
+                    </button>
+                    <div style={{ height: '100px' }}></div>
                 </div>
-                <div className="title"> Detail Infomation Doctor</div>
-                <MdEditor
-                    style={{ height: '480px' }}
-                    renderHTML={(text) => mdParser.render(text)}
-                    onChange={this.handleEditorChange}
-                    value={this.state.contentMarkdown}
-                />
-                <button className="btn btn-primary mt-4" onClick={this.handleSaveInfoDoctor}>
-                    Save
-                </button>
-                <div style={{ height: '100px' }}></div>
             </div>
         );
     }

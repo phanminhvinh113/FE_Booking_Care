@@ -46,19 +46,20 @@ class Doctors extends Component {
                 <h1 className="title_section">Bác sĩ nổi bật tuần qua</h1>
                 <div className="specialty_content">
                     <Slider {...settings}>
-                        {this.state.doctorsArr.map((doctor, index) => {
-                            return (
-                                <div key={index} className="wrapper" onClick={() => this.handleViewDetailDoctor(doctor)}>
-                                    <a>
-                                        <div className="img-border">
-                                            <img src={!!doctor && doctor.image} alt="" />
-                                        </div>
-                                        <h3>{doctor.DoctorInfo?.name}</h3>
-                                        <h5>{doctor.DoctorInfo.specs.valueVI || ' '}</h5>
-                                    </a>
-                                </div>
-                            );
-                        })}
+                        {this.state.doctorsArr.length &&
+                            this.state.doctorsArr.map((doctor, index) => {
+                                return (
+                                    <div key={index} className="wrapper" onClick={() => this.handleViewDetailDoctor(doctor)}>
+                                        <a>
+                                            <div className="img-border">
+                                                <img src={!!doctor && doctor.image} alt="" />
+                                            </div>
+                                            <h3>{doctor.DoctorInfo?.name}</h3>
+                                            <h5>{doctor.DoctorInfo.specs.valueVI || ' '}</h5>
+                                        </a>
+                                    </div>
+                                );
+                            })}
                     </Slider>
                 </div>
             </div>

@@ -1,3 +1,7 @@
+@font-face {
+    font-family: 'Anuphan-VariableFont';
+    src: url('../../../../assets/font/Anuphan-VariableFont_wght.ttf');
+}
 .section_facilites {
     height: 330px;
     padding: 25px;
@@ -6,8 +10,7 @@
         padding: 15px 0px 20px 0px;
         margin-left: 10px;
     }
-    .specialty_content {
-    }
+
     img {
         width: 278px !important;
         height: 156.38px !important;
@@ -17,15 +20,15 @@
         }
     }
     h3 {
-        font-family: 'Montserrat', sans-serif;
-        margin-top: 5px;
-        font-size: 1.3rem;
+        font-family: 'Anuphan-VariableFont';
+        margin-top: 8px;
+        font-size: 1.5rem;
         outline: none;
         user-select: none;
     }
     .slick-slider {
         width: 1170px;
-        //transform: translateX(10px) !important;
+
         margin: auto;
     }
     .slick-next {

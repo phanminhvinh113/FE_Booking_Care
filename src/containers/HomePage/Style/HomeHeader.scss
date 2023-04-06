@@ -1,4 +1,13 @@
+@font-face {
+    font-family: 'Font-Header-Home-Regular';
+    src: url('../../../assets/font/Poppins-Regular.ttf');
+}
+@font-face {
+    font-family: 'Font-Header-Home-Medium';
+    src: url('../../../assets/font/Poppins-Medium.ttf');
+}
 .home-header-container {
+    font-family: 'Font-Header-Home-Regular';
     display: flex;
     justify-content: center;
     padding: 10px 0;
@@ -34,23 +43,25 @@
             margin: 0 20px;
         }
         a {
+            font-family: 'Font-Header-Home-Medium';
             display: flex;
             outline: none;
             color: #333;
-            font-weight: bold;
-            font-size: 12px;
+
+            font-size: 14px;
             text-decoration: none;
         }
         span {
             font-weight: lighter;
-            font-size: 10px;
+            font-size: 12px;
             display: block;
         }
     }
     .footer {
         span {
+            font-family: 'Font-Header-Home-Regular';
+            font-size: 1.6rem;
             color: #969495;
-            font-weight: 600;
             margin: 0 5px;
             cursor: pointer;
         }
@@ -93,7 +104,7 @@
             color: #ebe5e5;
             border-radius: 8px;
             font-size: 1.5rem;
-            font-weight: 500;
+            font-weight: 600;
         }
     }
 }

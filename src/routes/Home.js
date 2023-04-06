@@ -5,13 +5,13 @@ import { ROLE_USER, path } from '../utils';
 
 class Home extends Component {
     render() {
-        let linkToRedirect = path.LOGIN;
+        let linkToRedirect = path.HOMEPAGE;
         //
         const { isLoggedIn, userInfo } = this.props;
         //
         if (isLoggedIn && userInfo?.roleId === ROLE_USER.ADMIN) linkToRedirect = path.SYSTEM;
         if (isLoggedIn && userInfo?.roleId === ROLE_USER.DOCTOR) linkToRedirect = path.DOCTOR;
-        if (isLoggedIn && userInfo?.roleId === ROLE_USER.PATIENT) linkToRedirect = path.HOMEPAGE;
+        //if (!isLoggedIn || !userInfo?.roleId === ROLE_USER.PATIENT) linkToRedirect = path.LOGIN;
         //
         return <Redirect to={linkToRedirect} />;
     }
