@@ -236,9 +236,18 @@ export const fetchScheduleDoctorByDate = (doctorId, date) => {
 export const getTopDoctorHomePage = (limit) => {
     return async (dispatch, getState) => {
         try {
+            const data = sessionStorage.getItem('ListTopDoctor');
+            if (data) {
+                return dispatch({
+                    type: actionTypes.FETCH_TOP_DOCTOR_HOME_SUCCESS,
+                    doctors: JSON.parse(data),
+                });
+            }
+
             const { data: res } = await getTopDoctorHomeService(limit);
             if (res && res.errCode === 0) {
-                dispatch({
+                sessionStorage.setItem('ListTopDoctor', JSON.stringify(res.data));
+                return dispatch({
                     type: actionTypes.FETCH_TOP_DOCTOR_HOME_SUCCESS,
                     doctors: res.data,
                 });
@@ -258,12 +267,20 @@ export const getTopDoctorHomePage = (limit) => {
 export const fetchTopSpecialtyHome = (limit) => {
     return async (dispatch, getState) => {
         try {
+            const data = sessionStorage.getItem('ListTopSpecialty');
+            if (data) {
+                return dispatch({
+                    type: actionTypes.FETCH_TOP_SPECIATLY_HOME_SUCCESS,
+                    data: JSON.parse(data),
+                });
+            }
             const { data: res } = await getTopSpecialtyHome(limit);
             if (res && res.errCode === 0) {
                 dispatch({
                     type: actionTypes.FETCH_TOP_SPECIATLY_HOME_SUCCESS,
                     data: res.data,
                 });
+                sessionStorage.setItem('ListTopSpecialty', JSON.stringify(res.data));
             } else {
                 dispatch({
                     type: actionTypes.FETCH_TOP_SPECIATLY_HOME_FAILED,
@@ -279,6 +296,13 @@ export const fetchTopSpecialtyHome = (limit) => {
 //GET TOP CLINIC HOME PAGE
 export const fetchTopClinicHome = (limit) => {
     return async (dispatch, getState) => {
+        const data = sessionStorage.getItem('ListTopClinic');
+        if (data) {
+            return dispatch({
+                type: actionTypes.FETCH_TOP_CLINIC_HOME_SUCCESS,
+                data: JSON.parse(data),
+            });
+        }
         try {
             const { data: res } = await getTopClinicHome(limit);
             if (res && res.errCode === 0) {
@@ -286,6 +310,7 @@ export const fetchTopClinicHome = (limit) => {
                     type: actionTypes.FETCH_TOP_CLINIC_HOME_SUCCESS,
                     data: res.data,
                 });
+                sessionStorage.setItem('ListTopClinic', JSON.stringify(res.data));
             } else {
                 dispatch({
                     type: actionTypes.FETCH_TOP_CLINIC_HOME_FAILED,

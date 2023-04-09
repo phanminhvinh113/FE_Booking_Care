@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Style/Specialty.scss';
 
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import * as actions from '../../../store/actions';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -47,10 +47,10 @@ class Specialty extends Component {
                         {!!listSpecialty.length &&
                             listSpecialty.map((item, index) => {
                                 return (
-                                    <div key={index} onClick={() => this.handleViewDetailSpecialty(item.specialtyId)}>
+                                    <Link to={`/detail-specialty/${item.specialtyId}`} key={index}>
                                         <img src={item.image} />
                                         <h3>{item.name}</h3>
-                                    </div>
+                                    </Link>
                                 );
                             })}
                     </Slider>

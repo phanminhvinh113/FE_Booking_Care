@@ -9,6 +9,7 @@ import { languages, path } from '../../utils/constant';
 import { changingLanguageApp } from '../../store/actions';
 import SideBarNav from './SideBar/SideBarNav';
 import './Style/HomeHeader.scss';
+import ToolTip from '../../components/Tippy/ToolTip';
 class HomeHeader extends Component {
     constructor(props) {
         super(props);
@@ -22,10 +23,13 @@ class HomeHeader extends Component {
             <>
                 <div className="home-header-container">
                     <div className="home-header-content">
-                        <div className="header">
-                            <SideBarNav />
-                            <Link to={path.HOMEPAGE} className="logo"></Link>
-                        </div>
+                        <ToolTip content="Trang chủ" position="bottom" size="15">
+                            <div className="header">
+                                <SideBarNav />
+                                <Link to={path.HOMEPAGE} className="logo"></Link>
+                            </div>
+                        </ToolTip>
+
                         <div className="body">
                             <div>
                                 <Link to={path.SPECIALTYHEADER}>
@@ -74,11 +78,13 @@ class HomeHeader extends Component {
                                 <span onClick={() => this.changeLanguage(languages.EN)}>EN</span>
                             </div>
                         </div>
+
                         {!this.props.isLoggedIn && (
                             <div className="loggin">
                                 <Link to={path.LOGIN}>Login</Link>
                             </div>
                         )}
+
                         {this.props?.isLoggedIn && <AavatarUser />}
                     </div>
                 </div>

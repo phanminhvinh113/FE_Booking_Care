@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { Link } from 'react-router-dom';
 
 class Facilities extends Component {
     constructor(props) {
@@ -37,10 +38,10 @@ class Facilities extends Component {
                         {!!listClinic.length &&
                             listClinic.map((clinic, index) => {
                                 return (
-                                    <div key={index}>
+                                    <Link key={index}>
                                         <img src={clinic.image} />
                                         <h3>{clinic.name}</h3>
-                                    </div>
+                                    </Link>
                                 );
                             })}
                     </Slider>

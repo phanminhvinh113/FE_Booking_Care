@@ -202,7 +202,7 @@ class ConversationMessage extends Component {
                 getMore: false,
                 loading: false,
             });
-        }, 1000);
+        }, 200);
     };
     //
     intersectionObsever = () => {

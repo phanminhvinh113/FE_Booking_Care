@@ -33,13 +33,6 @@
             height: 100%;
             border-radius: 50%;
         }
-        a {
-            width: 278px;
-        }
-        &:hover ~ h3 {
-            color: #54e0f0e1;
-            font-style: italic;
-        }
     }
     h3 {
         font-family: 'Poppins-Regular-Doctor', sans-serif;
@@ -63,9 +56,13 @@
         }
     }
     .wrapper {
+        width: 278px;
         border: 1px solid rgb(225, 223, 223);
         margin-left: 4px;
         height: 256px;
+        &:hover h3 {
+            color: #42b6c9;
+        }
     }
     .slick-next {
         right: 30px !important;

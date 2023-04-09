@@ -6,6 +6,7 @@ import ImageUserNoneAvatar from '../../../assets/images/Chat/guest.png';
 import styled, { keyframes } from 'styled-components';
 import _ from 'lodash';
 import { path } from '../../../utils';
+import ToolTip from '../../../components/Tippy/ToolTip';
 
 class AavatarUser extends Component {
     constructor(props) {
@@ -48,11 +49,13 @@ class AavatarUser extends Component {
     render() {
         return (
             <Wrapper>
-                <AvatarUser
-                    ref={this.Avatar}
-                    onClick={this.handleShowContent}
-                    src={_.get(this.props.userInfo, 'image', 'false') || ImageUserNoneAvatar}
-                />
+                <ToolTip content="Profile" position="bottom">
+                    <AvatarUser
+                        ref={this.Avatar}
+                        onClick={this.handleShowContent}
+                        src={_.get(this.props.userInfo, 'image', 'false') || ImageUserNoneAvatar}
+                    />
+                </ToolTip>
                 <WrapperContent ref={this.wrapperRef} display={this.state.isShow ? 'block' : 'none'}>
                     <div className="container">
                         <HeaderMenu>

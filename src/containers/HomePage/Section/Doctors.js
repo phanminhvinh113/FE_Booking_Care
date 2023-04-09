@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as actions from '../../../store/actions';
 import './Style/Doctors.scss';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -49,15 +49,13 @@ class Doctors extends Component {
                         {this.state.doctorsArr.length &&
                             this.state.doctorsArr.map((doctor, index) => {
                                 return (
-                                    <div key={index} className="wrapper" onClick={() => this.handleViewDetailDoctor(doctor)}>
-                                        <a>
-                                            <div className="img-border">
-                                                <img src={!!doctor && doctor.image} alt="" />
-                                            </div>
-                                            <h3>{doctor.DoctorInfo?.name}</h3>
-                                            <h5>{doctor.DoctorInfo.specs.valueVI || ' '}</h5>
-                                        </a>
-                                    </div>
+                                    <Link to={`/detail-doctor/${doctor.id}`} key={index} className="wrapper">
+                                        <div className="img-border">
+                                            <img src={!!doctor && doctor.image} alt="" />
+                                        </div>
+                                        <h3>{doctor.DoctorInfo?.name}</h3>
+                                        <h5>{doctor.DoctorInfo.specs.valueVI || ' '}</h5>
+                                    </Link>
                                 );
                             })}
                     </Slider>

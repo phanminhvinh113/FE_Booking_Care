@@ -239,7 +239,7 @@ class MessageDoctorPatient extends Component {
                                             src={
                                                 item.senderId === this.props.inforDoctor.id
                                                     ? _.get(this.props.inforDoctor, 'image', BookingCareAvatar)
-                                                    : _.get(this.props.userInfo, 'image', 'false') || GuestAvatar
+                                                    : _.get(this.props.userInfo, 'image', `${GuestAvatar}`) || GuestAvatar
                                             }
                                         />
                                         <div className="text-and-time">
