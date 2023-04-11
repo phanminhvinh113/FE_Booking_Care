@@ -13,6 +13,7 @@ const initialState = {
     topSpecialtyHome: [],
     topClinicHome: [],
     auth: {},
+    feedbacks: [],
 };
 
 const adminReducer = (state = initialState, action) => {
@@ -75,6 +76,13 @@ const adminReducer = (state = initialState, action) => {
         case actionTypes.FETCH_DETAIL_INFO_DOCTOR_FAILED: {
             return {
                 ...state,
+            };
+        }
+        case actionTypes.FETCH_FEEDBACK_DOCTOR_SUCCESS: {
+            console.log(action.data);
+            return {
+                ...state,
+                feedbacks: action.data,
             };
         }
         case actionTypes.SAVE_DETAIL_DOCTOR_FAILED:

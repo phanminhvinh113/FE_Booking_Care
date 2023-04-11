@@ -6,8 +6,8 @@ import moment from 'moment';
 import { toast } from 'react-toastify';
 import Footer from '../../HomePage/Footer';
 import HeaderHome from '../../HomePage/HeaderHome';
-import './Style/ReviewDoctor.scss';
 import { evaluateMedicalDoctor } from '../../../services/userService';
+import './Style/ReviewDoctor.scss';
 
 /////
 class ReviewDoctor extends Component {
@@ -17,6 +17,7 @@ class ReviewDoctor extends Component {
             rate: 0,
             comment: '',
             date: moment(new Date()).format('DD/MM/YYYY'),
+            parentId: 0,
         };
         this.stars = [1, 2, 3, 4, 5];
     }
@@ -28,17 +29,13 @@ class ReviewDoctor extends Component {
         const token = urlParams.get('token');
         const patientId = urlParams.get('patientId');
         const doctorId = urlParams.get('doctorId');
+
         if (token && patientId) {
-            this.setState(
-                {
-                    token,
-                    patientId,
-                    doctorId,
-                },
-                () => {
-                    console.log(this.state);
-                },
-            );
+            this.setState({
+                token,
+                patientId,
+                doctorId,
+            });
         }
     }
     //

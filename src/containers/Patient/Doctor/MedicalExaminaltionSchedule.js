@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment/moment';
+import * as actions from '../../../store/actions';
 import _ from 'lodash';
 import localization from 'moment/locale/vi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { faHandPointUp } from '@fortawesome/free-regular-svg-icons';
-import { getScheduleDoctorByDateService } from '../../../services/adminService';
 import ModalBooking from './ModalBooking';
 import './Style/MedicalExaminationSchedule.scss';
 
@@ -16,7 +16,6 @@ class MedicalExaminationSchedule extends Component {
         super(props);
         this.state = {
             allDays: [],
-            currentDay: moment(new Date()).startOf('day').valueOf(),
             scheduleDoctorByDate: [],
             isOpenModalBooking: false,
             nameDoctor: '',
@@ -39,18 +38,22 @@ class MedicalExaminationSchedule extends Component {
             object.value = moment(new Date()).add(i, 'days').startOf('day').valueOf();
             arrDay.push(object);
         }
-        const { data: response } = await getScheduleDoctorByDateService(this.props.doctorId, this.state.currentDay);
         this.setState({
             allDays: arrDay,
-            scheduleDoctorByDate: response.data,
         });
     }
     ///// DID UPDATE /////
     async componentDidUpdate(prevProps, prevState, snapshot) {
-        const { inforDoctor } = this.props;
+        const { inforDoctor, scheduleDoctorByDate } = this.props;
+        //
         if (prevProps.inforDoctor !== inforDoctor) {
             this.setState({
                 inforDoctor,
+            });
+        }
+        if (prevProps.scheduleDoctorByDate !== scheduleDoctorByDate) {
+            this.setState({
+                scheduleDoctorByDate,
             });
         }
     }
@@ -61,20 +64,12 @@ class MedicalExaminationSchedule extends Component {
     /////
     handleOnChangeSelectDate = async (e) => {
         const date = e.target.value;
-        const { data: response } = await getScheduleDoctorByDateService(this.props.doctorId, date);
-        this.setState({
-            scheduleDoctorByDate: response.data,
-        });
+        await this.props.getScheduleDoctorByDate(this.props.doctorId, date);
     };
     //
     handleBookingSchdule = (data) => {
-        if (data) {
-            const { date, timeType, timeTypeData } = data;
-            this.setState({
-                dateSlected: { date, timeType, timeTypeData },
-            });
-        }
         this.setState({
+            dateSlected: data || {},
             isOpenModalBooking: !this.state.isOpenModalBooking,
         });
     };
@@ -140,11 +135,12 @@ class MedicalExaminationSchedule extends Component {
 const mapStateToProps = (state) => {
     return {
         language: state.app.language,
+        scheduleDoctorByDate: state.admin.scheduleDoctorByDate,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return {};
+    return { getScheduleDoctorByDate: (doctorId, date) => dispatch(actions.fetchScheduleDoctorByDate(doctorId, date)) };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MedicalExaminationSchedule);

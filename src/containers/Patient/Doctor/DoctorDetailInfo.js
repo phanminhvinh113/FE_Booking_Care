@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import _ from 'lodash';
 import * as actions from '../../../store/actions';
-import { getFeedbackDoctor } from '../../../services/adminService';
+import moment from 'moment';
 import Footer from '../../HomePage/Footer';
 import MessageDoctorPatient from '../Chat/MessageDoctorPatient';
 import HeaderDefaultSection from '../HeaderDefaultSection';
@@ -28,18 +28,14 @@ class DoctorDetailInfo extends Component {
 
         document.body.scrollTop = this.props.positionDoctorPage;
         //PROPS
-        const { match, getDetailInfoDoctor } = this.props;
+        const { match, getDetailInfoDoctor, getFeedbackDoctor, getScheduleDoctorByDate } = this.props;
+
         //CONDITION
         if (match && match.params.id) {
             const doctorId = match.params.id;
+            const currentDay = moment(new Date()).startOf('day').valueOf();
             //GET API
-            const [res2, { data: res }] = await Promise.all([getDetailInfoDoctor(doctorId), getFeedbackDoctor(doctorId)]);
-            //SET STATE FEEBECK FROM USER
-            if (res && res.errCode === 0) {
-                this.setState({
-                    feedbacks: res.feedbacks,
-                });
-            }
+            await Promise.all([getDetailInfoDoctor(doctorId), getFeedbackDoctor(doctorId), getScheduleDoctorByDate(doctorId, currentDay)]);
         }
         document.title = this.props.inforDoctor.DoctorInfo?.name || '';
     }
@@ -112,6 +108,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         getDetailInfoDoctor: (doctorId) => dispatch(actions.fetchDetailInfoDoctor(doctorId)),
         getPositionDoctorPage: (scrollY) => dispatch(actions.getPostionScrollDoctorPage(scrollY)),
+        getFeedbackDoctor: (doctorId) => dispatch(actions.getFeedbackDoctorService(doctorId)),
+        getScheduleDoctorByDate: (doctorId, date) => dispatch(actions.fetchScheduleDoctorByDate(doctorId, date)),
     };
 };
 

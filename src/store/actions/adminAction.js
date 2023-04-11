@@ -1,5 +1,5 @@
 import actionTypes from './actionTypes';
-import { getAllCode, getAllUsers, updateUserService, createNewUserService, refreshToken } from '../../services/userService';
+import { getAllCode, getAllUsers, updateUserService, createNewUserService } from '../../services/userService';
 import { toast } from 'react-toastify';
 import {
     getAllDoctorService,
@@ -9,9 +9,9 @@ import {
     getTopClinicHome,
     getTopDoctorHomeService,
     getTopSpecialtyHome,
+    getFeedbackDoctor,
 } from '../../services/adminService';
 import { auth } from '../../utils';
-import jwtDecode from 'jwt-decode';
 
 export const fetchApiStart = (inputType) => {
     return async (dispatch, getState) => {
@@ -319,6 +319,28 @@ export const fetchTopClinicHome = (limit) => {
         } catch (error) {
             dispatch({
                 type: actionTypes.FETCH_TOP_CLINIC_HOME_FAILED,
+            });
+        }
+    };
+};
+
+export const getFeedbackDoctorService = (doctorId) => {
+    return async (dispatch, getState) => {
+        try {
+            const { data: res } = await getFeedbackDoctor(doctorId);
+            if (res && res.errCode === 0) {
+                dispatch({
+                    type: actionTypes.FETCH_FEEDBACK_DOCTOR_SUCCESS,
+                    data: res?.feedbacks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) || [],
+                });
+            } else {
+                dispatch({
+                    type: actionTypes.FETCH_FEEDBACK_DOCTOR_FAILED,
+                });
+            }
+        } catch (error) {
+            dispatch({
+                type: actionTypes.FETCH_FEEDBACK_DOCTOR_FAILED,
             });
         }
     };

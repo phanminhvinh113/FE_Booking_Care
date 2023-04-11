@@ -93,21 +93,19 @@ class ManagePatientBooking extends Component {
                                     </tr>
                                     {!!listPatient.length &&
                                         listPatient.map((user, index) => {
-                                            const { patientData, timeTypeDataBooking, patientId } = user;
+                                            const { patientData, timeTypeDataBooking } = user;
                                             const { genderData } = patientData;
+                                            console.log(user);
                                             return (
                                                 <tr key={index}>
                                                     <td>{index + 1}</td>
-                                                    <td>{timeTypeDataBooking.valueVI}</td>
-                                                    <td>{patientData.firstName}</td>
-                                                    <td>{patientData.address}</td>
-                                                    <td>{genderData.valueVI}</td>
-                                                    <td>{patientData.phonenumber}</td>
+                                                    <td>{timeTypeDataBooking?.valueVI}</td>
+                                                    <td>{patientData?.firstName}</td>
+                                                    <td>{patientData?.address}</td>
+                                                    <td>{genderData?.valueVI}</td>
+                                                    <td>{patientData?.phonenumber}</td>
                                                     <td style={{ padding: '5px 15px', textAlign: 'center' }}>
-                                                        <button
-                                                            className="btn-bill"
-                                                            onClick={() => this.handleInvoicingPatient(user)}
-                                                        >
+                                                        <button className="btn-bill" onClick={() => this.handleInvoicingPatient(user)}>
                                                             Xuất hóa đơn
                                                         </button>
                                                     </td>
@@ -116,9 +114,7 @@ class ManagePatientBooking extends Component {
                                         })}
                                 </tbody>
                             </table>
-                            {!listPatient.length && (
-                                <div className="title mt-4">KHÔNG CÓ BỆNH NHÂN NÀO ĐẶT LỊCH VÀO NGÀY NÀY</div>
-                            )}
+                            {!listPatient.length && <div className="title mt-4">KHÔNG CÓ BỆNH NHÂN NÀO ĐẶT LỊCH VÀO NGÀY NÀY</div>}
                         </div>
                         <ModalSendBillMedical
                             handleToggle={this.handleInvoicingPatient}

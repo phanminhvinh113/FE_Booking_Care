@@ -47,7 +47,7 @@ const ToolTipWrapper = styled.div`
     }
     font-family: 'ToolTip';
     position: relative;
-    // TOP
+    z-index: 1000; // TOP
     .top {
         bottom: 100%;
         left: 50%;
@@ -107,6 +107,7 @@ const ToolTipWrapper = styled.div`
     }
 `;
 const ToolTipContent = styled.div`
+    z-index: 1000;
     position: absolute;
     font-size: ${(props) => props.size + 'px' || '15px'};
     background-color: ${(props) => props.backgroudColor || '#595959'};

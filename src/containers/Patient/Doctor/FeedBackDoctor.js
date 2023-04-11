@@ -1,10 +1,8 @@
-import { faStar } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Comment from './Comment';
 import './Style/FeedBackDoctor.scss';
 
-/////
 class FeedBackDoctor extends Component {
     constructor(props) {
         super(props);
@@ -31,17 +29,7 @@ class FeedBackDoctor extends Component {
                     <div className="list-feedbacks mt-4">
                         {!!this.state.feedbacks.length &&
                             this.state.feedbacks.map((feedback, index) => {
-                                return (
-                                    <div key={index} className="patient-feedback">
-                                        <strong>{feedback?.patient?.firstName || ''}</strong>
-                                        <span className="rate">
-                                            {feedback?.rate || ''}
-                                            <FontAwesomeIcon icon={faStar} />
-                                        </span>
-                                        <span className="date"> Vào ngày {feedback?.date || ''}</span>
-                                        <div className="comment">{feedback?.comment || ''}</div>
-                                    </div>
-                                );
+                                return <Comment key={feedback.id} feedback={feedback} parentId={feedback.parentId} />;
                             })}
                     </div>
                 </div>
@@ -51,7 +39,9 @@ class FeedBackDoctor extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return {};
+    return {
+        feedbacks: state.admin.feedbacks,
+    };
 };
 
 const mapDispatchToProps = (dispatch) => {

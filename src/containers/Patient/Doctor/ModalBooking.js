@@ -35,18 +35,20 @@ class ModalBooking extends Component {
     toggle = () => this.props.toggle();
     ///// DID UPDATE /////
     componentDidUpdate(prevProps, prevState, snapshot) {
-        const { dateBooking, infoDoctor } = this.props;
+        const { dateBooking, infoDoctor, isLoggedIn, userInfo } = this.props;
         if (prevProps.dateBooking !== dateBooking) {
             this.setState({
                 date: dateBooking.date,
                 time: dateBooking.timeTypeData,
                 timeType: dateBooking.timeType,
+                email: isLoggedIn ? userInfo?.email : '',
+                namePatient: isLoggedIn ? userInfo?.firstName + ' ' + userInfo?.lastName : '',
             });
         }
         if (prevProps.infoDoctor !== infoDoctor) {
             this.setState({
                 infoDoctor,
-                nameDoctor: infoDoctor.lastName + ' ' + infoDoctor.firstName,
+                nameDoctor: infoDoctor.lastName + +infoDoctor.firstName,
             });
         }
     }
@@ -94,8 +96,7 @@ class ModalBooking extends Component {
 
     //
     handleSubmitFormBooking = async () => {
-        const { email, phonenumber, address, timeType, date, time, reason, gender, namePatient, nameDoctor, emailDoctor } =
-            this.state;
+        const { email, phonenumber, address, timeType, date, time, reason, gender, namePatient, nameDoctor, emailDoctor } = this.state;
         if (this.checkValidateInput()) {
             this.toggle();
             this.setState({
@@ -297,14 +298,7 @@ class ModalBooking extends Component {
                                 </div>
                                 <div className="col-12">
                                     <div className="form-check">
-                                        <input
-                                            className="form-check-input"
-                                            type="checkbox"
-                                            value=""
-                                            id="invalidCheck"
-                                            required
-                                            defaultChecked
-                                        />
+                                        <input className="form-check-input" type="checkbox" value="" id="invalidCheck" required defaultChecked />
                                         <label className="form-check-label" htmlFor="invalidCheck">
                                             Bạn có sử dụng bảo hiểm (tư nhân)?
                                         </label>
@@ -329,7 +323,10 @@ class ModalBooking extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return {};
+    return {
+        isLoggedIn: state.user.isLoggedIn,
+        userInfo: state.user.userInfo,
+    };
 };
 
 const mapDispatchToProps = (dispatch) => {
