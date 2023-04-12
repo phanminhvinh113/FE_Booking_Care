@@ -102,53 +102,48 @@ class ModalBooking extends Component {
             this.setState({
                 isSending: true,
             });
-            setTimeout(async () => {
-                const { data: res } = await saveInfoBookingMedicalService({
-                    emailDoctor,
-                    nameDoctor,
-                    doctorId: this.props.doctorId,
-                    email,
-                    phonenumber,
-                    address,
-                    timeType,
-                    time,
-                    date,
-                    gender,
-                    reason,
-                    namePatient,
-                });
 
-                if (res) {
-                    if (res.errCode === 1) {
-                        toast.error(res.message, {
-                            theme: 'light',
-                        });
-                    } else if (res.errCode === 0) {
-                        toast.success(res.message);
-                    } else if (res.errCode !== 0) {
-                        toast.error('falied! try again ');
-                    }
-                    this.setState({
-                        isSending: false,
-                        email: '',
-                        date: '',
-                        time: '',
-                        timeType: '',
-                        namePatient: '',
-                        address: '',
-                        gender: '',
-                        phonenumber: '',
-                        reason: '',
-                        infoDoctor: this.props.infoDoctor,
+            const { data: res } = await saveInfoBookingMedicalService({
+                emailDoctor,
+                nameDoctor,
+                doctorId: this.props.doctorId,
+                email,
+                phonenumber,
+                address,
+                timeType,
+                time,
+                date,
+                gender,
+                reason,
+                namePatient,
+            });
+
+            if (res) {
+                if (res.errCode === 1) {
+                    toast.error(res.message, {
+                        theme: 'light',
                     });
+                } else if (res.errCode === 0) {
+                    toast.success(res.message);
+                } else if (res.errCode !== 0) {
+                    toast.error('falied! try again ');
                 }
-            }, 10000);
+                this.setState({
+                    isSending: false,
+                    email: '',
+                    date: '',
+                    time: '',
+                    timeType: '',
+                    namePatient: '',
+                    address: '',
+                    gender: '',
+                    phonenumber: '',
+                    reason: '',
+                    infoDoctor: this.props.infoDoctor,
+                });
+            }
         }
     };
-
-    //
-
-    //
 
     //// RENDER ///
     render() {
@@ -184,9 +179,9 @@ class ModalBooking extends Component {
                         <div className="right">
                             <header>ĐẶT LỆNH KHÁM BỆNH: </header>
                             <h3>
-                                {!!positionData && !!positionData.valueVI && positionData.valueVI + ': '}
+                                {positionData && positionData.valueVI && positionData.valueVI + ': '}
                                 {nameDoctor}
-                                {!!firstnamePatient && firstnamePatient}
+                                {firstnamePatient && firstnamePatient}
                             </h3>
                             <div className="day-booking">
                                 <span>{!!time && time.valueVI} </span>
@@ -298,7 +293,14 @@ class ModalBooking extends Component {
                                 </div>
                                 <div className="col-12">
                                     <div className="form-check">
-                                        <input className="form-check-input" type="checkbox" value="" id="invalidCheck" required defaultChecked />
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            value=""
+                                            id="invalidCheck"
+                                            required
+                                            defaultChecked
+                                        />
                                         <label className="form-check-label" htmlFor="invalidCheck">
                                             Bạn có sử dụng bảo hiểm (tư nhân)?
                                         </label>

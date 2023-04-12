@@ -20,6 +20,10 @@ class FeedBackDoctor extends Component {
             });
         }
     }
+    //
+    getListReplies = (id) => {
+        return this.props.feedbacks.filter((feedback) => feedback.parentId === id);
+    };
     //// RENDER ///
     render() {
         return (
@@ -29,7 +33,18 @@ class FeedBackDoctor extends Component {
                     <div className="list-feedbacks mt-4">
                         {!!this.state.feedbacks.length &&
                             this.state.feedbacks.map((feedback, index) => {
-                                return <Comment key={feedback.id} feedback={feedback} parentId={feedback.parentId} />;
+                                return (
+                                    feedback.parentId === 0 && (
+                                        <Comment
+                                            key={feedback.id}
+                                            feedback={feedback}
+                                            parentId={feedback.parentId}
+                                            id={feedback.id}
+                                            doctorId={this.props.doctorId}
+                                            getListReplies={this.getListReplies(feedback.id)}
+                                        />
+                                    )
+                                );
                             })}
                     </div>
                 </div>

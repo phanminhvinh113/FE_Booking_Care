@@ -24,19 +24,19 @@ class DoctorDetailInfo extends Component {
 
     //// DID MOUNT ////
     async componentDidMount() {
-        //SCROLL ON TOP AND SET TITLE
-
+        //SCROLL ON TOP
         document.body.scrollTop = this.props.positionDoctorPage;
         //PROPS
         const { match, getDetailInfoDoctor, getFeedbackDoctor, getScheduleDoctorByDate } = this.props;
-
         //CONDITION
         if (match && match.params.id) {
+            //
             const doctorId = match.params.id;
             const currentDay = moment(new Date()).startOf('day').valueOf();
             //GET API
             await Promise.all([getDetailInfoDoctor(doctorId), getFeedbackDoctor(doctorId), getScheduleDoctorByDate(doctorId, currentDay)]);
         }
+        //SET TITLE
         document.title = this.props.inforDoctor.DoctorInfo?.name || '';
     }
 
@@ -53,8 +53,6 @@ class DoctorDetailInfo extends Component {
     componentWillUnmount() {
         this.props.getPositionDoctorPage(document.body.scrollTop);
     }
-    ///
-
     //// RENDER ///
     render() {
         const { match } = this.props;
@@ -83,7 +81,7 @@ class DoctorDetailInfo extends Component {
                         ></div>
                     </div>
                     <div className="response-patient">
-                        <FeedBackDoctor feedbacks={feedbacks} />
+                        <FeedBackDoctor feedbacks={feedbacks} doctorId={match.params.id} />
                     </div>
                     <div>
                         <MessageDoctorPatient doctorId={match.params.id} />

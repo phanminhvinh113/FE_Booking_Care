@@ -395,7 +395,6 @@ const InputChat = styled.div`
     border-top: 1px solid #eee;
     width: 100%;
     background-color: #fff;
-    //max-height: 150px;
     padding: 20px 0;
     svg {
         font-size: 2.5rem;

@@ -68,6 +68,10 @@ export const evaluateMedicalDoctor = (data) => {
     return axios.post('/api/evaluate-doctor', data);
 };
 //
+export const commentEvaluteMical = (data) => {
+    return axios.post('/api/comment-evalute', data);
+};
+//
 export const getMessagePatientDoctorService = ({ senderId, receiverId, offset, limit }) => {
     return axios.get('/api/get_all_message', {
         params: {
