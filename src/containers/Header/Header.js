@@ -29,9 +29,14 @@ class Header extends Component {
             });
         }
     }
-
+    handleLogout = () => {
+        if (this.props.userInfo) {
+            const { email, id } = this.props.userInfo;
+            this.props.processLogout({ email, id });
+        }
+    };
     render() {
-        const { userInfo, processLogout } = this.props;
+        const { userInfo } = this.props;
 
         return (
             <div className="header-container">
@@ -45,7 +50,7 @@ class Header extends Component {
                     {userInfo && userInfo.firstName ? userInfo.firstName : ''}
                 </div>
                 {/* nút logout */}
-                <Link to={path.LOGIN} className="btn btn-logout" onClick={processLogout}>
+                <Link to={path.LOGIN} className="btn btn-logout" onClick={this.handleLogout}>
                     <i className="fas fa-sign-out-alt"></i>
                 </Link>
             </div>
@@ -62,7 +67,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        processLogout: () => dispatch(actions.processLogout()),
+        processLogout: (user) => dispatch(actions.processLogout(user)),
     };
 };
 

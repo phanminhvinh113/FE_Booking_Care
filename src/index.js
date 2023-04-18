@@ -9,7 +9,6 @@ import IntlProviderWrapper from './hoc/IntlProviderWrapper';
 import GlobalStyles from './components/GlobalStyle';
 import { Provider } from 'react-redux';
 import reduxStore, { persistor } from './redux';
-import ScrollToTop from './components/ScrollToTop';
 
 const renderApp = () => {
     ReactDOM.render(
@@ -25,8 +24,3 @@ const renderApp = () => {
 };
 
 renderApp();
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-//serviceWorker.unregister();
-//serviceWorker.checkValidServiceWorker();

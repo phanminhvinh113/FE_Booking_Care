@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import axios from '../axios';
 import instance from './interceptorService';
 //
@@ -7,11 +8,8 @@ export const handleLogInUserService = (email, password) => {
 };
 //
 export const handleLogOutUserService = (data) => {
-    return instance.post('/api/logout', {
+    return axios.post('/api/logout', {
         data,
-        headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
-        },
     });
 };
 

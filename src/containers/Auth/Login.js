@@ -2,16 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as actions from '../../store/actions';
-import firebase, { logginWithGoogleFirebase, logginWithFaceBookFirebase } from './firebase';
+import Cookies from 'js-cookie';
+import { logginWithGoogleFirebase, logginWithFaceBookFirebase } from './firebase';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF } from '@fortawesome/free-brands-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { handleLogInUserService } from '../../services/userService';
 import { path, ROLE_USER, TITLE_BROWSWER } from '../../utils/constant';
 import { Link } from 'react-router-dom';
-import './Login.scss';
 import { toast } from 'react-toastify';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import './Login.scss';
 
 class Login extends Component {
     ///////////////////\\INITIAL VALUES\\///////////////////////////////////
@@ -65,6 +66,7 @@ class Login extends Component {
         sessionStorage.removeItem(name);
         sessionStorage.setItem(name, token);
     };
+
     //////////////////\\HANDLE LOGIN USER\\/////////////////////
     handleLogIn = async () => {
         try {
@@ -83,7 +85,8 @@ class Login extends Component {
                 });
                 //
                 const { access_token } = data?.token;
-                this.sessionStorageToken('access_token', access_token);
+                //
+                Cookies.set('access_token', access_token);
                 //
                 await this.props.userLogInSucces(data.user);
                 //
